@@ -1,9 +1,8 @@
 import Head from "next/head";
-
 import Header from "./header";
 
 interface LayoutProps {
-  children: JSX.Element;
+  children?: JSX.Element;
   titulo?: string;
   descricao?: string;
 }

@@ -1,15 +1,17 @@
+import { useRouter } from "next/dist/client/router";
 import styles from "../styles/Header.module.css";
 
 function Header() {
+  const router = useRouter();
+
   return (
-    <header>
-      <figure className={styles.circulo_figura}>
-        <img
-          className={styles.circulo}
-          src="/circle.svg"
-          alt="um círculo preto"
-        />
-      </figure>
+    <header className={styles.cabecalho}>
+      <div
+        className={[
+          styles.circulo,
+          router.isFallback && styles.circulo_carregando,
+        ].join(" ")}
+      ></div>
     </header>
   );
 }

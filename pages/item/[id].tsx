@@ -1,7 +1,7 @@
 import parser from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
-import Head from "next/head";
+import { useRouter } from "next/dist/client/router";
 import { MAXIMO_ITENS } from "..";
 import Layout from "../../components/layout";
 import { Item, obterItem, obterTopStories } from "../../lib/api";
@@ -47,7 +47,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     paths.push({ params: { id } });
   }
 
-  return { paths, fallback: "blocking" };
+  return { paths, fallback: true };
 };
 
 interface PaginaItemProps {
@@ -98,6 +98,12 @@ function PaginaItem({
 
     return html;
   };
+
+  const router = useRouter();
+
+  if (router.isFallback) {
+    return <Layout />;
+  }
 
   return (
     <Layout
