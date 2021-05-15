@@ -3,6 +3,7 @@ import DOMPurify from "isomorphic-dompurify";
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
 import Head from "next/head";
 import { MAXIMO_ITENS } from "..";
+import Layout from "../../components/layout";
 import { Item, obterItem, obterTopStories } from "../../lib/api";
 import { formatarData } from "../../lib/util";
 import styles from "../../styles/Item.module.css";
@@ -99,48 +100,44 @@ function PaginaItem({
   };
 
   return (
-    <main>
-      <Head>
-        <title>{itemEncapsulado.item.title} / hacker news</title>
-        <meta
-          name="description"
-          content={`(${itemEncapsulado.item.score}) ${itemEncapsulado.item.by}`}
-        ></meta>
-        <link rel="icon" type="image/svg+xml" href="/circle.svg" />
-        <link rel="alternate icon" href="/favicon.ico" />
-      </Head>
-      <article>
-        <section className={styles.item}>
-          <p className={styles.pontos}>{itemEncapsulado.item.score}</p>
-          <h1 className={styles.titulo}>
-            <a
-              href={
-                itemEncapsulado.item.url ?? `item/${itemEncapsulado.item.id}`
-              }
-              className={styles[itemEncapsulado.item.type]}
-            >
-              {itemEncapsulado.item.title}
-            </a>
-          </h1>
-          <footer className={styles.informacoes}>
-            <span>{itemEncapsulado.item.by}</span>
-            <span>{itemEncapsulado.dataFormatada}</span>
-          </footer>
-        </section>
-
-        {itemEncapsulado.textoSanitizado && (
-          <section className={styles.conteudo}>
-            {parser(itemEncapsulado.textoSanitizado)}
+    <Layout
+      titulo={itemEncapsulado.item.title}
+      descricao={`(${itemEncapsulado.item.score}) por ${itemEncapsulado.item.by}`}
+    >
+      <main>
+        <article>
+          <section className={styles.item}>
+            <p className={styles.pontos}>{itemEncapsulado.item.score}</p>
+            <h1 className={styles.titulo}>
+              <a
+                href={
+                  itemEncapsulado.item.url ?? `item/${itemEncapsulado.item.id}`
+                }
+                className={styles[itemEncapsulado.item.type]}
+              >
+                {itemEncapsulado.item.title}
+              </a>
+            </h1>
+            <footer className={styles.informacoes}>
+              <span>{itemEncapsulado.item.by}</span>
+              <span>{itemEncapsulado.dataFormatada}</span>
+            </footer>
           </section>
-        )}
 
-        {itemEncapsulado.comentarios && (
-          <section className={styles.comentarios}>
-            {renderizarItens(itemEncapsulado.comentarios)}
-          </section>
-        )}
-      </article>
-    </main>
+          {itemEncapsulado.textoSanitizado && (
+            <section className={styles.conteudo}>
+              {parser(itemEncapsulado.textoSanitizado)}
+            </section>
+          )}
+
+          {itemEncapsulado.comentarios && (
+            <section className={styles.comentarios}>
+              {renderizarItens(itemEncapsulado.comentarios)}
+            </section>
+          )}
+        </article>
+      </main>
+    </Layout>
   );
 }
 

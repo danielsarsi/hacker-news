@@ -1,5 +1,6 @@
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import Head from "next/head";
+import Layout from "../components/layout";
 import { Item, obter, obterItem, obterTopStories } from "../lib/api";
 import styleInicio from "../styles/Inicio.module.css";
 import styleItem from "../styles/Item.module.css";
@@ -54,18 +55,11 @@ function Inicio({ itens }: InferGetStaticPropsType<typeof getStaticProps>) {
   }
 
   return (
-    <main>
-      <Head>
-        <title>hacker news</title>
-        <meta
-          name="description"
-          content="outra versão de news.ycombinator.com"
-        ></meta>
-        <link rel="icon" type="image/svg+xml" href="/circle.svg" />
-        <link rel="alternate icon" href="/favicon.ico" />
-      </Head>
-      <ol className={styleInicio.lista}>{elementosLista}</ol>
-    </main>
+    <Layout>
+      <main>
+        <ol className={styleInicio.lista}>{elementosLista}</ol>
+      </main>
+    </Layout>
   );
 }
 
