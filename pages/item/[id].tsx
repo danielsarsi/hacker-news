@@ -18,7 +18,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     paths.push({ params: { id: id.toString() } });
   }
 
-  return { paths, fallback: false };
+  return { paths, fallback: "blocking" };
 };
 
 interface Comentario {
