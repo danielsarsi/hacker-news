@@ -1,9 +1,9 @@
+import DOMPurify from "dompurify";
+import parser from "html-react-parser";
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
 import { MAXIMO_ITENS } from "..";
 import { Item, obterItem, obterTopStories } from "../../lib/api";
 import { formatarData } from "../../lib/util";
-import parser from "html-react-parser";
-
 import styles from "../../styles/Item.module.css";
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -77,7 +77,9 @@ const PaginaItem = ({
           <span>{formatarData(item.time)}</span>
         </footer>
         {item.text && (
-          <section className={styles.conteudo}>{parser(item.text)}</section>
+          <section className={styles.conteudo}>
+            {parser(DOMPurify.sanitize(item.text))}
+          </section>
         )}
         {comentarios && renderizarComentarios(comentarios)}
       </article>
@@ -104,7 +106,9 @@ const PaginaItem = ({
         </section>
 
         {item.text && (
-          <section className={styles.conteudo}>{parser(item.text)}</section>
+          <section className={styles.conteudo}>
+            {parser(DOMPurify.sanitize(item.text))}
+          </section>
         )}
 
         {comentarios.length > 0 && (
