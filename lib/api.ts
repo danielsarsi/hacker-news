@@ -1,16 +1,4 @@
-import axios from "axios";
-import { setupCache } from "axios-cache-adapter";
-
 const API_URL = "https://hacker-news.firebaseio.com/v0";
-
-const cache = setupCache({
-  maxAge: 60 * 1000,
-});
-
-const api = axios.create({
-  adapter: cache.adapter,
-  baseURL: API_URL,
-});
 
 export interface Item {
   id: number;
@@ -31,9 +19,8 @@ export interface Item {
 }
 
 export async function obter(url: string) {
-  const req = await api.get(url);
-  const json = req.data;
-  return json;
+  const req = await fetch(`${API_URL}${url}`);
+  return req.json();
 }
 
 export async function obterItem(id: number): Promise<Item> {
