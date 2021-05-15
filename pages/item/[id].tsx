@@ -6,155 +6,133 @@ import { Item, obterItem, obterTopStories } from "../../lib/api";
 import { formatarData } from "../../lib/util";
 import styles from "../../styles/Item.module.css";
 
+interface ItemEncapsulado {
+  item: Item;
+  textoSanitizado?: string;
+  dataFormatada: string;
+  comentarios?: ItemEncapsulado[];
+}
+
+const encapsularItem = async (item: Item) => {
+  const itemEncapsulado: ItemEncapsulado = {
+    item,
+    textoSanitizado: DOMPurify.sanitize(item.text ?? "") ?? undefined,
+    dataFormatada: formatarData(item.time),
+  };
+
+  if (item.kids) {
+    itemEncapsulado.comentarios = [];
+
+    for (const id of item.kids) {
+      const proximoItem = await obterItem(id);
+      const proximoItemEncapsulado = await encapsularItem(proximoItem);
+      itemEncapsulado.comentarios.push(proximoItemEncapsulado);
+    }
+  }
+
+  return itemEncapsulado;
+};
+
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths = [];
   const topStories = await obterTopStories();
 
-  for (const [index, id] of Object.entries(topStories)) {
-    if (+index > MAXIMO_ITENS) {
+  for (let index = 0; index < topStories.length; index++) {
+    if (index > MAXIMO_ITENS) {
       break;
     }
 
-    paths.push({ params: { id: id.toString() } });
+    const id = "" + topStories[index];
+    paths.push({ params: { id } });
   }
 
   return { paths, fallback: "blocking" };
 };
 
-interface Comentario {
-  item: Item;
-  textoSanitizado?: string;
-  dataFormatada: string;
-  comentarios?: Comentario[];
+interface PaginaItemProps {
+  itemEncapsulado: ItemEncapsulado;
 }
 
-const obterComentarios = async (item: Item) => {
-  const comentario: Comentario = {
-    item,
-    dataFormatada: formatarData(item.time),
-    comentarios: [],
-  };
-
-  if (item.text) {
-    comentario.textoSanitizado = DOMPurify.sanitize(item.text);
-  }
-
-  if (item.kids) {
-    for (const kid of item.kids) {
-      const i = await obterItem(kid);
-      comentario.comentarios!.push(await obterComentarios(i));
-    }
-  }
-
-  return comentario;
-};
-
-export const getStaticProps: GetStaticProps<{
-  item: Item;
-  textoSanitizado?: string;
-  dataFormatada: string;
-  comentarios: Comentario[];
-}> = async ({ params }) => {
+export const getStaticProps: GetStaticProps<PaginaItemProps> = async ({
+  params,
+}) => {
   if (!params?.id) {
-    return {
-      notFound: true,
-    };
+    return { notFound: true };
   }
 
   const item = await obterItem(+params.id);
-
-  let textoSanitizado = "";
-  if (item.text) {
-    textoSanitizado = DOMPurify.sanitize(item.text);
-  }
-
-  const dataFormatada = formatarData(item.time);
-
-  const comentarios: Comentario[] = [];
-  if (item.kids) {
-    for (const kid of item.kids) {
-      const i = await obterItem(kid);
-      comentarios.push(await obterComentarios(i));
-    }
-  }
+  const itemEncapsulado = await encapsularItem(item);
 
   return {
-    props: { item, comentarios, textoSanitizado, dataFormatada },
+    props: { itemEncapsulado },
     revalidate: 60,
   };
 };
 
-const PaginaItem = ({
-  item,
-  textoSanitizado,
-  dataFormatada,
-  comentarios,
-}: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const renderizarComentarios = (loop: Comentario[]) => {
+function PaginaItem({
+  itemEncapsulado,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
+  const renderizarItens = (itens: ItemEncapsulado[]) => {
     const html: JSX.Element[] = [];
 
-    for (const comentario of loop) {
-      let textoEmHTML;
-      if (comentario.textoSanitizado) {
-        textoEmHTML = (
-          <section className={styles.conteudo}>
-            {parser(comentario.textoSanitizado)}
-          </section>
+    for (const item of itens) {
+      // API retorna em branco, às vezes
+      if (item.textoSanitizado) {
+        html.push(
+          <article className={styles.comentario} key={item.item.id}>
+            <footer className={styles.informacoes}>
+              <span>{item.item.by}</span>
+              <span>{item.dataFormatada}</span>
+            </footer>
+            {item.textoSanitizado && (
+              <section className={styles.conteudo}>
+                {parser(item.textoSanitizado)}
+              </section>
+            )}
+            {item.comentarios && renderizarItens(item.comentarios)}
+          </article>
         );
       }
-
-      html.push(
-        <article className={styles.comentario} key={comentario.item.id}>
-          <footer className={styles.informacoes}>
-            <span>{comentario.item.by}</span>
-            <span>{comentario.dataFormatada}</span>
-          </footer>
-          {textoEmHTML}
-          {comentario.comentarios &&
-            renderizarComentarios(comentario.comentarios)}
-        </article>
-      );
     }
 
     return html;
   };
 
-  let textoEmHTML;
-  if (textoSanitizado) {
-    textoEmHTML = (
-      <section className={styles.conteudo}>{parser(textoSanitizado)}</section>
-    );
-  }
-
   return (
     <main>
       <article>
         <section className={styles.item}>
-          <p className={styles.pontos}>{item.score}</p>
+          <p className={styles.pontos}>{itemEncapsulado.item.score}</p>
           <h1 className={styles.titulo}>
             <a
-              href={item.url ?? `item/${item.id}`}
-              className={styles[item.type]}
+              href={
+                itemEncapsulado.item.url ?? `item/${itemEncapsulado.item.id}`
+              }
+              className={styles[itemEncapsulado.item.type]}
             >
-              {item.title}
+              {itemEncapsulado.item.title}
             </a>
           </h1>
           <footer className={styles.informacoes}>
-            <span>{item.by}</span>
-            <span>{dataFormatada}</span>
+            <span>{itemEncapsulado.item.by}</span>
+            <span>{itemEncapsulado.dataFormatada}</span>
           </footer>
         </section>
 
-        {textoEmHTML}
+        {itemEncapsulado.textoSanitizado && (
+          <section className={styles.conteudo}>
+            {parser(itemEncapsulado.textoSanitizado)}
+          </section>
+        )}
 
-        {comentarios.length > 0 && (
+        {itemEncapsulado.comentarios && (
           <section className={styles.comentarios}>
-            {renderizarComentarios(comentarios)}
+            {renderizarItens(itemEncapsulado.comentarios)}
           </section>
         )}
       </article>
     </main>
   );
-};
+}
 
 export default PaginaItem;
