@@ -8,6 +8,8 @@
     "start": "next start"
   },
   "dependencies": {
+    "axios": "^0.21.1",
+    "axios-cache-adapter": "^2.7.3",
     "html-react-parser": "^1.2.6",
     "isomorphic-dompurify": "^0.13.0",
     "next": "10.2.0",

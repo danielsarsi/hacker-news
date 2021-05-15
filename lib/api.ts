@@ -1,3 +1,17 @@
+import axios from "axios";
+import { setupCache } from "axios-cache-adapter";
+
+const API_URL = "https://hacker-news.firebaseio.com/v0";
+
+const cache = setupCache({
+  maxAge: 60 * 1000,
+});
+
+const api = axios.create({
+  adapter: cache.adapter,
+  baseURL: API_URL,
+});
+
 export interface Item {
   id: number;
   deleted?: boolean;
@@ -16,20 +30,18 @@ export interface Item {
   descendants?: number;
 }
 
-const API_URL = "https://hacker-news.firebaseio.com/v0";
-
 export async function obter(url: string) {
-  const req = await fetch(url);
-  const json = await req.json();
+  const req = await api.get(url);
+  const json = req.data;
   return json;
 }
 
 export async function obterItem(id: number): Promise<Item> {
-  const req = await obter(`${API_URL}/item/${id}.json`);
+  const req = await obter(`/item/${id}.json`);
   return req;
 }
 
 export async function obterTopStories(): Promise<number[]> {
-  const req = await obter(`${API_URL}/topstories.json`);
+  const req = await obter(`/topstories.json`);
   return req;
 }
