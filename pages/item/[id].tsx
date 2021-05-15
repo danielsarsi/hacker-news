@@ -22,13 +22,12 @@ const encapsularItem = async (item: Item) => {
   };
 
   if (item.kids) {
-    itemEncapsulado.comentarios = [];
+    const proximosItens = await Promise.all(item.kids.map(obterItem));
+    const proximosItensEncapsulados = await Promise.all(
+      proximosItens.map(encapsularItem)
+    );
 
-    for (const id of item.kids) {
-      const proximoItem = await obterItem(id);
-      const proximoItemEncapsulado = await encapsularItem(proximoItem);
-      itemEncapsulado.comentarios.push(proximoItemEncapsulado);
-    }
+    itemEncapsulado.comentarios = proximosItensEncapsulados;
   }
 
   return itemEncapsulado;
