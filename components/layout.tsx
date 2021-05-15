@@ -1,5 +1,7 @@
 import Head from "next/head";
 
+import Header from "./header";
+
 interface LayoutProps {
   children: JSX.Element;
   titulo?: string;
@@ -8,7 +10,7 @@ interface LayoutProps {
 
 function Layout({ children, titulo, descricao }: LayoutProps) {
   return (
-    <div>
+    <>
       <Head>
         <title>{titulo ? `${titulo} / hacker news` : `hacker news`}</title>
         <meta
@@ -18,8 +20,9 @@ function Layout({ children, titulo, descricao }: LayoutProps) {
         <link rel="icon" type="image/svg+xml" href="/circle.svg" />
         <link rel="alternate icon" href="/favicon.ico" />
       </Head>
+      <Header />
       {children}
-    </div>
+    </>
   );
 }
 

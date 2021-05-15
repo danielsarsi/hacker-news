@@ -1,0 +1,15 @@
+.circulo_figura {
+  margin: 8ch;
+  display: flex;
+}
+
+.circulo {
+  width: 4ch;
+  height: 4ch;
+}
+
+@media screen and (max-width: 600px) {
+  .circulo_figura {
+    margin: 5ch 3ch;
+  }
+}
