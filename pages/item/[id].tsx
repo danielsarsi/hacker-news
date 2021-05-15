@@ -86,8 +86,8 @@ const PaginaItem = ({
       html.push(
         <article className={styles.comentario} key={comentario.item.id}>
           <footer className={styles.informacoes}>
-            <span>{item.by}</span>
-            <span>{formatarData(item.time)}</span>
+            <span>{comentario.item.by}</span>
+            <span>{formatarData(comentario.item.time)}</span>
           </footer>
           {textoEmHTML}
           {comentario.comentarios &&
