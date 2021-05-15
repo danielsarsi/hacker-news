@@ -81,15 +81,15 @@ function PaginaItem({
       if (item.textoSanitizado) {
         html.push(
           <article className={styles.comentario} key={item.item.id}>
-            <footer className={styles.informacoes}>
-              <span>{item.item.by}</span>
-              <span>{item.dataFormatada}</span>
-            </footer>
             {item.textoSanitizado && (
               <section className={styles.conteudo}>
                 {parser(item.textoSanitizado)}
               </section>
             )}
+            <footer className={styles.informacoes}>
+              <span>{item.item.by}</span>
+              <span>{item.dataFormatada}</span>
+            </footer>
             {item.comentarios && renderizarItens(item.comentarios)}
           </article>
         );

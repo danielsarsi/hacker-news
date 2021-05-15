@@ -46,18 +46,23 @@
 
 .comentarios {
   margin: 3ch 0;
+  margin-left: calc(6ch - 2ch - 1.5ch - 2px);
 }
 
 .comentario {
   margin: 3ch 0;
-  margin-left: 4ch;
-  padding-left: 1ch;
-  border-left: 1ch solid #eee;
+  margin-left: 2ch;
+  padding-left: 1.5ch;
+  border-left: 2px solid #eee;
+  transition: border-left-color 0.05s ease;
+}
+
+.comentario:hover {
+  border-left-color: #222;
 }
 
 .comentario .conteudo {
   margin: 2ch 0;
-  margin-left: 2ch;
 }
 
 .comentario .informacoes {
