@@ -42,6 +42,9 @@
 .conteudo {
   margin: 3ch 0;
   margin-left: 6ch;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
 }
 
 .comentarios {
