@@ -6,12 +6,14 @@ function Header() {
 
   return (
     <header className={styles.cabecalho}>
-      <div
-        className={[
-          styles.circulo,
-          router.isFallback && styles.circulo_carregando,
-        ].join(" ")}
-      ></div>
+      <a href="/">
+        <div
+          className={[
+            styles.circulo,
+            router.isFallback && styles.circulo_carregando,
+          ].join(" ")}
+        ></div>
+      </a>
     </header>
   );
 }

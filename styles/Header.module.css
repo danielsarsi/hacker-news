@@ -1,5 +1,6 @@
 .cabecalho {
   margin: 8ch;
+  display: flex;
 }
 
 .circulo {
