@@ -1,3 +1,3 @@
 # hacker news
 
-(mais) outra versão do [news.ycombinator.com](news.ycombinator.com)
+(mais) outra versão do [news.ycombinator.com](http://news.ycombinator.com)
