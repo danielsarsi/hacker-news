@@ -1,7 +1,7 @@
 import parser from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import { MAXIMO_ITENS } from "..";
 import Layout from "../../components/layout";
 import { Item, obterItem, obterTopStories } from "../../lib/api";
