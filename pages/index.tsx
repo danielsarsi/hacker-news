@@ -15,9 +15,7 @@ export const getStaticProps: GetStaticProps<InicioProps> = async () => {
 
   // limita o número de itens
   const itensDaPagina = topStories.slice(0, MAXIMO_ITENS);
-
-  const reqs = itensDaPagina.map(obterItem);
-  const itens = await Promise.all(reqs);
+  const itens = await Promise.all(itensDaPagina.map(obterItem));
 
   return {
     props: {
