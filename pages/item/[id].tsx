@@ -1,5 +1,5 @@
-import DOMPurify from "dompurify";
 import parser from "html-react-parser";
+import DOMPurify from "isomorphic-dompurify";
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
 import { MAXIMO_ITENS } from "..";
 import { Item, obterItem, obterTopStories } from "../../lib/api";
@@ -69,22 +69,43 @@ const PaginaItem = ({
   item,
   comentarios,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const renderizarComentarios = (c: Comentario[]) => {
-    return c.map(({ item, comentarios }) => (
-      <article className={styles.comentario}>
-        <footer className={styles.informacoes}>
-          <span>{item.by}</span>
-          <span>{formatarData(item.time)}</span>
-        </footer>
-        {item.text && (
+  const renderizarComentarios = (loop: Comentario[]) => {
+    const html: JSX.Element[] = [];
+
+    for (const comentario of loop) {
+      let textoEmHTML;
+      if (comentario.item.text) {
+        const textoSanitizado = DOMPurify.sanitize(comentario.item.text);
+        textoEmHTML = (
           <section className={styles.conteudo}>
-            {parser(DOMPurify.sanitize(item.text))}
+            {parser(textoSanitizado)}
           </section>
-        )}
-        {comentarios && renderizarComentarios(comentarios)}
-      </article>
-    ));
+        );
+      }
+
+      html.push(
+        <article className={styles.comentario} key={comentario.item.id}>
+          <footer className={styles.informacoes}>
+            <span>{item.by}</span>
+            <span>{formatarData(item.time)}</span>
+          </footer>
+          {textoEmHTML}
+          {comentario.comentarios &&
+            renderizarComentarios(comentario.comentarios)}
+        </article>
+      );
+    }
+
+    return html;
   };
+
+  let textoEmHTML;
+  if (item.text) {
+    const textoSanitizado = DOMPurify.sanitize(item.text);
+    textoEmHTML = (
+      <section className={styles.conteudo}>{parser(textoSanitizado)}</section>
+    );
+  }
 
   return (
     <main>
@@ -105,11 +126,7 @@ const PaginaItem = ({
           </footer>
         </section>
 
-        {item.text && (
-          <section className={styles.conteudo}>
-            {parser(DOMPurify.sanitize(item.text))}
-          </section>
-        )}
+        {textoEmHTML}
 
         {comentarios.length > 0 && (
           <section className={styles.comentarios}>
