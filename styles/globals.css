@@ -29,3 +29,9 @@ main {
 p {
   margin: 2ch 0;
 }
+
+@media screen and (max-width: 600px) {
+  main {
+    margin: 3ch;
+  }
+}

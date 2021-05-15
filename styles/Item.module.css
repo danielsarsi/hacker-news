@@ -68,3 +68,22 @@
 .comentario .informacoes {
   color: #666;
 }
+
+@media screen and (max-width: 600px) {
+  .item {
+    grid-template-columns: 5ch 1fr;
+  }
+
+  .conteudo {
+    margin-left: 0;
+  }
+
+  .comentarios {
+    margin-left: 0;
+  }
+
+  .comentario {
+    margin-left: 0;
+    padding-left: 1ch;
+  }
+}
