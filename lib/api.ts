@@ -10,7 +10,7 @@ export interface Item {
   poll?: number;
   kids?: number[];
   url: string;
-  score: number;
+  score?: number;
   title: string;
   parts?: number[];
   descendants?: number;
