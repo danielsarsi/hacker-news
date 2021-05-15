@@ -107,6 +107,8 @@ function PaginaItem({
           name="description"
           content={`(${itemEncapsulado.item.score}) ${itemEncapsulado.item.by}`}
         ></meta>
+        <link rel="icon" type="image/svg+xml" href="/circle.svg" />
+        <link rel="alternate icon" href="/favicon.ico" />
       </Head>
       <article>
         <section className={styles.item}>

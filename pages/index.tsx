@@ -65,6 +65,8 @@ function Inicio({ itens }: InferGetStaticPropsType<typeof getStaticProps>) {
           name="description"
           content="outra versão de news.ycombinator.com"
         ></meta>
+        <link rel="icon" type="image/svg+xml" href="/circle.svg" />
+        <link rel="alternate icon" href="/favicon.ico" />
       </Head>
       <ol className={styleInicio.lista}>{elementosLista}</ol>
     </main>
