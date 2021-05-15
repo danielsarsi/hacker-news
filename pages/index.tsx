@@ -1,7 +1,6 @@
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import Head from "next/head";
 import { Item, obterItem, obterTopStories } from "../lib/api";
-import { formatarData } from "../lib/util";
 import styleInicio from "../styles/Inicio.module.css";
 import styleItem from "../styles/Item.module.css";
 
@@ -51,7 +50,6 @@ function Inicio({ itens }: InferGetStaticPropsType<typeof getStaticProps>) {
           <footer className={styleItem.informacoes}>
             <span>{item.by}</span>
             <a href={`item/${item.id}`}>{comentarios}</a>
-            {/* <span>{formatarData(item.time)}</span> */}
           </footer>
         </article>
       </li>

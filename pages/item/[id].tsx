@@ -24,11 +24,16 @@ export const getStaticPaths: GetStaticPaths = async () => {
 interface Comentario {
   item: Item;
   textoSanitizado?: string;
+  dataFormatada: string;
   comentarios?: Comentario[];
 }
 
 const obterComentarios = async (item: Item) => {
-  const comentario: Comentario = { item, comentarios: [] };
+  const comentario: Comentario = {
+    item,
+    dataFormatada: formatarData(item.time),
+    comentarios: [],
+  };
 
   if (item.text) {
     comentario.textoSanitizado = DOMPurify.sanitize(item.text);
@@ -47,6 +52,7 @@ const obterComentarios = async (item: Item) => {
 export const getStaticProps: GetStaticProps<{
   item: Item;
   textoSanitizado?: string;
+  dataFormatada: string;
   comentarios: Comentario[];
 }> = async ({ params }) => {
   if (!params?.id) {
@@ -57,10 +63,12 @@ export const getStaticProps: GetStaticProps<{
 
   const item = await obterItem(+params.id);
 
-  let textoSanitizado;
+  let textoSanitizado = "";
   if (item.text) {
     textoSanitizado = DOMPurify.sanitize(item.text);
   }
+
+  const dataFormatada = formatarData(item.time);
 
   const comentarios: Comentario[] = [];
   if (item.kids) {
@@ -71,7 +79,7 @@ export const getStaticProps: GetStaticProps<{
   }
 
   return {
-    props: { item, comentarios },
+    props: { item, comentarios, textoSanitizado, dataFormatada },
     revalidate: 60,
   };
 };
@@ -79,6 +87,7 @@ export const getStaticProps: GetStaticProps<{
 const PaginaItem = ({
   item,
   textoSanitizado,
+  dataFormatada,
   comentarios,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const renderizarComentarios = (loop: Comentario[]) => {
@@ -98,7 +107,7 @@ const PaginaItem = ({
         <article className={styles.comentario} key={comentario.item.id}>
           <footer className={styles.informacoes}>
             <span>{comentario.item.by}</span>
-            <span>{formatarData(comentario.item.time)}</span>
+            <span>{comentario.dataFormatada}</span>
           </footer>
           {textoEmHTML}
           {comentario.comentarios &&
@@ -132,7 +141,7 @@ const PaginaItem = ({
           </h1>
           <footer className={styles.informacoes}>
             <span>{item.by}</span>
-            <span>{formatarData(item.time)}</span>
+            <span>{dataFormatada}</span>
           </footer>
         </section>
 
