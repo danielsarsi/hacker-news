@@ -13,6 +13,7 @@ interface InicioProps {
 export const getStaticProps: GetStaticProps<InicioProps> = async () => {
   const topStories = await obterTopStories();
 
+  // limita o número de itens
   const itensDaPagina = topStories.slice(0, MAXIMO_ITENS);
 
   const itens: Item[] = [];
@@ -29,13 +30,9 @@ export const getStaticProps: GetStaticProps<InicioProps> = async () => {
 };
 
 function Inicio({ itens }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const itensLista = itens.map((item) => {
-    let comentarios = `${item.descendants ?? 0} comentários`;
-    if (item.descendants === 1) {
-      comentarios = "1 comentário";
-    }
-
-    return (
+  const elementosLista: JSX.Element[] = [];
+  for (const item of itens) {
+    elementosLista.push(
       <li key={item.id}>
         <article className={styleItem.item}>
           <p className={styleItem.pontos}>{item.score}</p>
@@ -49,19 +46,23 @@ function Inicio({ itens }: InferGetStaticPropsType<typeof getStaticProps>) {
           </h1>
           <footer className={styleItem.informacoes}>
             <span>{item.by}</span>
-            <a href={`item/${item.id}`}>{comentarios}</a>
+            <a href={`item/${item.id}`}>
+              {item.descendants === 1
+                ? `1 comentário`
+                : `${item.descendants ?? 0} comentários`}
+            </a>
           </footer>
         </article>
       </li>
     );
-  });
+  }
 
   return (
     <main>
       <Head>
         <title>hacker news</title>
       </Head>
-      <ol className={styleInicio.lista}>{itensLista}</ol>
+      <ol className={styleInicio.lista}>{elementosLista}</ol>
     </main>
   );
 }
