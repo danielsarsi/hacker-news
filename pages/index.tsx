@@ -1,6 +1,6 @@
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import Head from "next/head";
-import { Item, obterItem, obterTopStories } from "../lib/api";
+import { Item, obter, obterItem, obterTopStories } from "../lib/api";
 import styleInicio from "../styles/Inicio.module.css";
 import styleItem from "../styles/Item.module.css";
 
@@ -16,10 +16,8 @@ export const getStaticProps: GetStaticProps<InicioProps> = async () => {
   // limita o número de itens
   const itensDaPagina = topStories.slice(0, MAXIMO_ITENS);
 
-  const itens: Item[] = [];
-  for (const id of itensDaPagina) {
-    itens.push(await obterItem(id));
-  }
+  const reqs = itensDaPagina.map(obterItem);
+  const itens = await Promise.all(reqs);
 
   return {
     props: {
