@@ -23,11 +23,16 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 interface Comentario {
   item: Item;
+  textoSanitizado?: string;
   comentarios?: Comentario[];
 }
 
 const obterComentarios = async (item: Item) => {
   const comentario: Comentario = { item, comentarios: [] };
+
+  if (item.text) {
+    comentario.textoSanitizado = DOMPurify.sanitize(item.text);
+  }
 
   if (item.kids) {
     for (const kid of item.kids) {
@@ -41,6 +46,7 @@ const obterComentarios = async (item: Item) => {
 
 export const getStaticProps: GetStaticProps<{
   item: Item;
+  textoSanitizado?: string;
   comentarios: Comentario[];
 }> = async ({ params }) => {
   if (!params?.id) {
@@ -50,6 +56,11 @@ export const getStaticProps: GetStaticProps<{
   }
 
   const item = await obterItem(+params.id);
+
+  let textoSanitizado;
+  if (item.text) {
+    textoSanitizado = DOMPurify.sanitize(item.text);
+  }
 
   const comentarios: Comentario[] = [];
   if (item.kids) {
@@ -67,6 +78,7 @@ export const getStaticProps: GetStaticProps<{
 
 const PaginaItem = ({
   item,
+  textoSanitizado,
   comentarios,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const renderizarComentarios = (loop: Comentario[]) => {
@@ -74,11 +86,10 @@ const PaginaItem = ({
 
     for (const comentario of loop) {
       let textoEmHTML;
-      if (comentario.item.text) {
-        const textoSanitizado = DOMPurify.sanitize(comentario.item.text);
+      if (comentario.textoSanitizado) {
         textoEmHTML = (
           <section className={styles.conteudo}>
-            {parser(textoSanitizado)}
+            {parser(comentario.textoSanitizado)}
           </section>
         );
       }
@@ -100,8 +111,7 @@ const PaginaItem = ({
   };
 
   let textoEmHTML;
-  if (item.text) {
-    const textoSanitizado = DOMPurify.sanitize(item.text);
+  if (textoSanitizado) {
     textoEmHTML = (
       <section className={styles.conteudo}>{parser(textoSanitizado)}</section>
     );
