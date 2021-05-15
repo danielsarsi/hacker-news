@@ -61,6 +61,10 @@ function Inicio({ itens }: InferGetStaticPropsType<typeof getStaticProps>) {
     <main>
       <Head>
         <title>hacker news</title>
+        <meta
+          name="description"
+          content="outra versão de news.ycombinator.com"
+        ></meta>
       </Head>
       <ol className={styleInicio.lista}>{elementosLista}</ol>
     </main>

@@ -1,6 +1,7 @@
 import parser from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
+import Head from "next/head";
 import { MAXIMO_ITENS } from "..";
 import { Item, obterItem, obterTopStories } from "../../lib/api";
 import { formatarData } from "../../lib/util";
@@ -100,6 +101,13 @@ function PaginaItem({
 
   return (
     <main>
+      <Head>
+        <title>{itemEncapsulado.item.title} / hacker news</title>
+        <meta
+          name="description"
+          content={`(${itemEncapsulado.item.score}) ${itemEncapsulado.item.by}`}
+        ></meta>
+      </Head>
       <article>
         <section className={styles.item}>
           <p className={styles.pontos}>{itemEncapsulado.item.score}</p>
