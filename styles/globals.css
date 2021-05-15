@@ -1,0 +1,31 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  color: #111;
+  font-family: monospace;
+}
+
+a {
+  color: inherit;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 0.25ch;
+  text-decoration-skip-ink: none;
+  transition: text-decoration-color 0.05s ease;
+}
+
+a:hover {
+  text-decoration-color: inherit;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+main {
+  margin: 3ch 8ch;
+}
+
+p {
+  margin: 2ch 0;
+}

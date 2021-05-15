@@ -1,0 +1,65 @@
+.item {
+  margin: 3ch 0;
+  display: grid;
+  grid-template-columns: 6ch 1fr;
+  grid-template-rows: auto auto;
+}
+
+.pontos {
+  font-weight: 700;
+  grid-row: 1 / -1;
+  margin: 0;
+}
+
+.titulo {
+  margin: 0;
+  font-size: 1em;
+  grid-row: 1 / 2;
+  grid-column: 2 / 3;
+}
+
+.informacoes {
+  grid-row: 2 / 3;
+  grid-column: 2 / 3;
+  color: #222;
+  margin-top: 0.5ch;
+  display: flex;
+  column-gap: 2ch;
+}
+
+.job:hover {
+  text-decoration-color: blue;
+}
+
+.poll:hover {
+  text-decoration-color: red;
+}
+
+.comment:hover {
+  text-decoration-color: green;
+}
+
+.conteudo {
+  margin: 3ch 0;
+  margin-left: 6ch;
+}
+
+.comentarios {
+  margin: 3ch 0;
+}
+
+.comentario {
+  margin: 3ch 0;
+  margin-left: 4ch;
+  padding-left: 1ch;
+  border-left: 1ch solid #eee;
+}
+
+.comentario .conteudo {
+  margin: 2ch 0;
+  margin-left: 2ch;
+}
+
+.comentario .informacoes {
+  color: #666;
+}
