@@ -10,7 +10,7 @@ function Header() {
         <div
           className={[
             styles.circulo,
-            router.isFallback && styles.circulo_carregando,
+            router.isFallback ? styles.circulo_carregando : undefined,
           ].join(" ")}
         ></div>
       </a>
