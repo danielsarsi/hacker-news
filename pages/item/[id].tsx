@@ -74,21 +74,21 @@ function PaginaItem({
   itemEncapsulado,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const renderizarItens = (itens: ItemEncapsulado[]) =>
-    itens.map((item) => {
+    itens.map(({ textoSanitizado, dataFormatada, item, comentarios }) => {
       // API retorna em branco, às vezes
-      if (item.textoSanitizado) {
+      if (textoSanitizado) {
         return (
-          <article className={styles.comentario} key={item.item.id}>
-            {item.textoSanitizado && (
+          <article className={styles.comentario} key={item.id}>
+            {textoSanitizado && (
               <section className={styles.conteudo}>
-                {parser(item.textoSanitizado)}
+                {parser(textoSanitizado)}
               </section>
             )}
             <footer className={styles.informacoes}>
-              <span>{item.item.by}</span>
-              <span>{item.dataFormatada}</span>
+              <span>{item.by}</span>
+              <span>{dataFormatada}</span>
             </footer>
-            {item.comentarios && renderizarItens(item.comentarios)}
+            {comentarios && renderizarItens(comentarios)}
           </article>
         );
       }
