@@ -1,10 +1,9 @@
 import parser from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
-import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
-import { MAXIMO_ITENS } from "..";
 import Layout from "../../components/layout";
-import { Item, obterItem, obterTopStories } from "../../lib/api";
+import { Item, obterItem } from "../../lib/api";
 import { formatarData } from "../../lib/util";
 import styles from "../../styles/Item.module.css";
 
@@ -34,27 +33,27 @@ const encapsularItem = async (item: Item) => {
   return itemEncapsulado;
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = [];
-  const topStories = await obterTopStories();
+// export const getStaticPaths: GetStaticPaths = async () => {
+//   const paths = [];
+//   const topStories = await obterTopStories();
 
-  for (let index = 0; index < topStories.length; index++) {
-    if (index > MAXIMO_ITENS) {
-      break;
-    }
+//   for (let index = 0; index < topStories.length; index++) {
+//     if (index > MAXIMO_ITENS) {
+//       break;
+//     }
 
-    const id = "" + topStories[index];
-    paths.push({ params: { id } });
-  }
+//     const id = "" + topStories[index];
+//     paths.push({ params: { id } });
+//   }
 
-  return { paths, fallback: true };
-};
+//   return { paths, fallback: true };
+// };
 
 interface PaginaItemProps {
   itemEncapsulado: ItemEncapsulado;
 }
 
-export const getStaticProps: GetStaticProps<PaginaItemProps> = async ({
+export const getServerSideProps: GetServerSideProps<PaginaItemProps> = async ({
   params,
 }) => {
   if (!params?.id) {
@@ -66,13 +65,13 @@ export const getStaticProps: GetStaticProps<PaginaItemProps> = async ({
 
   return {
     props: { itemEncapsulado },
-    revalidate: 60,
+    // revalidate: 60,
   };
 };
 
 function PaginaItem({
   itemEncapsulado,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const renderizarItens = (itens: ItemEncapsulado[]) =>
     itens.map(({ textoSanitizado, dataFormatada, item, comentarios }) => {
       // API retorna em branco, às vezes

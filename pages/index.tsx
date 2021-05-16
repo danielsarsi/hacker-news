@@ -1,7 +1,6 @@
-import { GetStaticProps, InferGetStaticPropsType } from "next";
-import Head from "next/head";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Layout from "../components/layout";
-import { Item, obter, obterItem, obterTopStories } from "../lib/api";
+import { Item, obterItem, obterTopStories } from "../lib/api";
 import styleInicio from "../styles/Inicio.module.css";
 import styleItem from "../styles/Item.module.css";
 
@@ -11,7 +10,7 @@ interface InicioProps {
   itens: Item[];
 }
 
-export const getStaticProps: GetStaticProps<InicioProps> = async () => {
+export const getServerSideProps: GetServerSideProps<InicioProps> = async () => {
   const topStories = await obterTopStories();
 
   // limita o número de itens
@@ -22,11 +21,13 @@ export const getStaticProps: GetStaticProps<InicioProps> = async () => {
     props: {
       itens,
     },
-    revalidate: 60,
+    // revalidate: 60,
   };
 };
 
-function Inicio({ itens }: InferGetStaticPropsType<typeof getStaticProps>) {
+function Inicio({
+  itens,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <Layout>
       <main>
