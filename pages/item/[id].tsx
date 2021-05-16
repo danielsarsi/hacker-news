@@ -73,13 +73,11 @@ export const getStaticProps: GetStaticProps<PaginaItemProps> = async ({
 function PaginaItem({
   itemEncapsulado,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const renderizarItens = (itens: ItemEncapsulado[]) => {
-    const html: JSX.Element[] = [];
-
-    for (const item of itens) {
+  const renderizarItens = (itens: ItemEncapsulado[]) =>
+    itens.map((item) => {
       // API retorna em branco, às vezes
       if (item.textoSanitizado) {
-        html.push(
+        return (
           <article className={styles.comentario} key={item.item.id}>
             {item.textoSanitizado && (
               <section className={styles.conteudo}>
@@ -94,10 +92,7 @@ function PaginaItem({
           </article>
         );
       }
-    }
-
-    return html;
-  };
+    });
 
   const router = useRouter();
 

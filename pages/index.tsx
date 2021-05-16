@@ -27,37 +27,34 @@ export const getStaticProps: GetStaticProps<InicioProps> = async () => {
 };
 
 function Inicio({ itens }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const elementosLista: JSX.Element[] = [];
-  for (const item of itens) {
-    elementosLista.push(
-      <li key={item.id}>
-        <article className={styleItem.item}>
-          <p className={styleItem.pontos}>{item.score}</p>
-          <h1 className={styleItem.titulo}>
-            <a
-              href={item.url ?? `item/${item.id}`}
-              className={styleItem[item.type]}
-            >
-              {item.title}
-            </a>
-          </h1>
-          <footer className={styleItem.informacoes}>
-            <span>{item.by}</span>
-            <a href={`item/${item.id}`}>
-              {item.descendants === 1
-                ? `1 comentário`
-                : `${item.descendants ?? 0} comentários`}
-            </a>
-          </footer>
-        </article>
-      </li>
-    );
-  }
-
   return (
     <Layout>
       <main>
-        <ol className={styleInicio.lista}>{elementosLista}</ol>
+        <ol className={styleInicio.lista}>
+          {itens.map((item) => (
+            <li key={item.id}>
+              <article className={styleItem.item}>
+                <p className={styleItem.pontos}>{item.score}</p>
+                <h1 className={styleItem.titulo}>
+                  <a
+                    href={item.url ?? `item/${item.id}`}
+                    className={styleItem[item.type]}
+                  >
+                    {item.title}
+                  </a>
+                </h1>
+                <footer className={styleItem.informacoes}>
+                  <span>{item.by}</span>
+                  <a href={`item/${item.id}`}>
+                    {item.descendants === 1
+                      ? `1 comentário`
+                      : `${item.descendants ?? 0} comentários`}
+                  </a>
+                </footer>
+              </article>
+            </li>
+          ))}
+        </ol>
       </main>
     </Layout>
   );
