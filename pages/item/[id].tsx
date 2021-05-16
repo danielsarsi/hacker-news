@@ -17,9 +17,12 @@ interface ItemEncapsulado {
 const encapsularItem = async (item: Item) => {
   const itemEncapsulado: ItemEncapsulado = {
     item,
-    textoSanitizado: DOMPurify.sanitize(item.text ?? "") ?? undefined,
     dataFormatada: formatarData(item.time),
   };
+
+  if (item.text) {
+    itemEncapsulado.textoSanitizado = DOMPurify.sanitize(item.text);
+  }
 
   if (item.kids) {
     const proximosItens = await Promise.all(item.kids.map(obterItem));
@@ -78,11 +81,9 @@ function PaginaItem({
       if (textoSanitizado) {
         return (
           <article className={styles.comentario} key={item.id}>
-            {textoSanitizado && (
-              <section className={styles.conteudo}>
-                {parser(textoSanitizado)}
-              </section>
-            )}
+            <section className={styles.conteudo}>
+              {parser(textoSanitizado)}
+            </section>
             <footer className={styles.informacoes}>
               <span>{item.by}</span>
               <span>{dataFormatada}</span>
