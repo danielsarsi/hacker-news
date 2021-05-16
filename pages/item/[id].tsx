@@ -26,8 +26,12 @@ const encapsularItem = async (item: Item) => {
 
   if (item.kids) {
     const proximosItens = await Promise.all(item.kids.map(obterItem));
+    // Foi importante filtrar itens com text e time, pois às vezes a API retorna
+    // null.
     const proximosItensEncapsulados = await Promise.all(
-      proximosItens.map(encapsularItem)
+      proximosItens
+        .filter((item) => item && item.text && item.time)
+        .map(encapsularItem)
     );
 
     itemEncapsulado.comentarios = proximosItensEncapsulados;
@@ -77,7 +81,6 @@ function PaginaItem({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const renderizarItens = (itens: ItemEncapsulado[]) =>
     itens.map(({ textoSanitizado, dataFormatada, item, comentarios }) => {
-      // API retorna em branco, às vezes
       if (textoSanitizado) {
         return (
           <article className={styles.comentario} key={item.id}>
