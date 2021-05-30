@@ -1,7 +1,6 @@
 import parser from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { useRouter } from "next/router";
 import Layout from "../../components/layout";
 import { Item, obterItem } from "../../lib/api";
 import { formatarData } from "../../lib/util";
@@ -20,22 +19,6 @@ const processarItem = (item: Item) => {
 
   return item;
 };
-
-// export const getStaticPaths: GetStaticPaths = async () => {
-//   const paths = [];
-//   const topStories = await obterTopStories();
-
-//   for (let index = 0; index < topStories.length; index++) {
-//     if (index > MAXIMO_ITENS) {
-//       break;
-//     }
-
-//     const id = "" + topStories[index];
-//     paths.push({ params: { id } });
-//   }
-
-//   return { paths, fallback: true };
-// };
 
 interface PaginaItemProps {
   item: Item;
@@ -56,7 +39,6 @@ export const getServerSideProps: GetServerSideProps<PaginaItemProps> = async ({
 
   return {
     props: { item: processarItem(item) },
-    // revalidate: 60,
   };
 };
 
