@@ -7,28 +7,18 @@ import { Item, obterItem } from "../../lib/api";
 import { formatarData } from "../../lib/util";
 import styles from "../../styles/Item.module.css";
 
-interface ItemEncapsulado {
-  item: Item;
-  textoSanitizado?: string;
-  dataFormatada: string;
-  comentarios?: ItemEncapsulado[];
-}
-
-const encapsularItem = (item: Item) => {
-  const itemEncapsulado: ItemEncapsulado = {
-    item,
-    dataFormatada: formatarData(item.time),
-  };
+const processarItem = (item: Item) => {
+  item.time_ago = formatarData(item.time);
 
   if (item.content) {
-    itemEncapsulado.textoSanitizado = DOMPurify.sanitize(item.content);
+    item.content = DOMPurify.sanitize(item.content);
   }
 
   if (item.comments_count > 0) {
-    itemEncapsulado.comentarios = item.comments.map(encapsularItem);
+    item.comments = item.comments.map(processarItem);
   }
 
-  return itemEncapsulado;
+  return item;
 };
 
 // export const getStaticPaths: GetStaticPaths = async () => {
@@ -48,7 +38,7 @@ const encapsularItem = (item: Item) => {
 // };
 
 interface PaginaItemProps {
-  itemEncapsulado: ItemEncapsulado;
+  item: Item;
 }
 
 export const getServerSideProps: GetServerSideProps<PaginaItemProps> = async ({
@@ -59,77 +49,57 @@ export const getServerSideProps: GetServerSideProps<PaginaItemProps> = async ({
   }
 
   const item = await obterItem(+params.id);
-  const itemEncapsulado = encapsularItem(item);
 
   return {
-    props: { itemEncapsulado },
+    props: { item: processarItem(item) },
     // revalidate: 60,
   };
 };
 
 function PaginaItem({
-  itemEncapsulado,
+  item,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const renderizarItens = (itens: ItemEncapsulado[]) =>
-    itens.map(({ textoSanitizado, dataFormatada, item, comentarios }) => {
-      if (textoSanitizado) {
-        return (
-          <article className={styles.comentario} key={item.id}>
-            <section className={styles.conteudo}>
-              {parser(textoSanitizado)}
-            </section>
-            <footer className={styles.informacoes}>
-              {item.user && <span>{item.user}</span>}
-              <span>{dataFormatada}</span>
-            </footer>
-            {comentarios && renderizarItens(comentarios)}
-          </article>
-        );
-      }
-    });
-
-  const router = useRouter();
-
-  if (router.isFallback) {
-    return <Layout />;
-  }
+  const renderizarComentario = (itens: Item[]) =>
+    itens.map((item) => (
+      <article className={styles.comentario} key={item.id}>
+        <section className={styles.conteudo}>{parser(item.content)}</section>
+        <footer className={styles.informacoes}>
+          {item.user && <span>{item.user}</span>}
+          <span>{item.time_ago}</span>
+        </footer>
+        {item.comments && renderizarComentario(item.comments)}
+      </article>
+    ));
 
   return (
-    <Layout
-      titulo={itemEncapsulado.item.title}
-      descricao={`(${itemEncapsulado.item.points}) por ${itemEncapsulado.item.user}`}
-    >
+    <Layout titulo={item.title} descricao={`(${item.points}) por ${item.user}`}>
       <main>
         <article>
           <section className={styles.item}>
-            <p className={styles.pontos}>{itemEncapsulado.item.points}</p>
+            <p className={styles.pontos}>{item.points}</p>
             <h1 className={styles.titulo}>
               <a
-                href={
-                  itemEncapsulado.item.url ?? `item/${itemEncapsulado.item.id}`
-                }
-                className={styles[itemEncapsulado.item.type]}
+                href={item.url ?? `item/${item.id}`}
+                className={styles[item.type]}
               >
-                {itemEncapsulado.item.title}
+                {item.title}
               </a>
             </h1>
             <footer className={styles.informacoes}>
-              {itemEncapsulado.item.user && (
-                <span>{itemEncapsulado.item.user}</span>
-              )}
-              <span>{itemEncapsulado.dataFormatada}</span>
+              {item.user && <span>{item.user}</span>}
+              <span>{item.time_ago}</span>
             </footer>
           </section>
 
-          {itemEncapsulado.textoSanitizado && (
+          {item.content && (
             <section className={styles.conteudo}>
-              {parser(itemEncapsulado.textoSanitizado)}
+              {parser(item.content)}
             </section>
           )}
 
-          {itemEncapsulado.comentarios && (
+          {item.comments && (
             <section className={styles.comentarios}>
-              {renderizarItens(itemEncapsulado.comentarios)}
+              {renderizarComentario(item.comments)}
             </section>
           )}
         </article>
