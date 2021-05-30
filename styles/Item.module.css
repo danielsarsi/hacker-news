@@ -58,13 +58,13 @@
 
 .comentarios {
   margin: 3ch 0;
-  margin-left: calc(6ch - 2ch - 1.5ch - 2px);
+  margin-left: calc(6ch - 1ch - 1ch - 2px);
 }
 
 .comentario {
   margin: 3ch 0;
-  margin-left: 2ch;
-  padding-left: 1.5ch;
+  margin-left: 1ch;
+  padding-left: 1ch;
   border-left: 2px solid #eee;
   transition: border-left-color 0.1s ease;
 }

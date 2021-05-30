@@ -1,4 +1,5 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import Link from "next/link";
 import Layout from "../../components/layout";
 import { obterTopico, Story } from "../../lib/api";
 import { formatarData } from "../../lib/util";
@@ -49,10 +50,7 @@ function Inicio({
                   {story.points ?? (story.type === "job" ? <>&#8212;</> : 0)}
                 </p>
                 <h1 className={styleItem.titulo}>
-                  <a
-                    href={story.url ?? `/item/${story.id}`}
-                    className={styleItem[story.type]}
-                  >
+                  <a href={story.url} className={styleItem[story.type]}>
                     {story.title}
                   </a>
                 </h1>
@@ -60,11 +58,13 @@ function Inicio({
                   <span>{story.time_ago}</span>
                   {story.user && <span>{story.user}</span>}
                   {story.type === "link" && (
-                    <a href={`/item/${story.id}`}>
-                      {story.comments_count === 1
-                        ? `1 comentário`
-                        : `${story.comments_count ?? 0} comentários`}
-                    </a>
+                    <Link href={`/item/${story.id}`}>
+                      <a>
+                        {story.comments_count === 1
+                          ? `1 comentário`
+                          : `${story.comments_count ?? 0} comentários`}
+                      </a>
+                    </Link>
                   )}
                 </footer>
               </article>

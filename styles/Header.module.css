@@ -1,6 +1,9 @@
 .cabecalho {
-  margin: 8ch;
+  margin-top: 8ch;
+  margin-left: 8ch;
   display: flex;
+  position: fixed;
+  top: 0;
 }
 
 .circulo {
@@ -31,6 +34,9 @@
 
 @media screen and (max-width: 600px) {
   .cabecalho {
-    margin: 5ch 3ch;
+    margin: 0;
+    padding: 5ch 3ch;
+    width: 100%;
+    background: linear-gradient(rgb(255, 255, 255, 1), rgb(255, 255, 255, 0));
   }
 }
