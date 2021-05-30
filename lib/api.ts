@@ -34,6 +34,7 @@ export interface Item {
 
 export async function obter(url: string) {
   const req = await fetch(`${API_URL}${url}`);
+
   return req.json();
 }
 
@@ -42,7 +43,11 @@ export async function obterItem(id: number): Promise<Item> {
   return req;
 }
 
-export async function obterNews(): Promise<Story[]> {
-  const req = await obter(`/news/1.json`);
+export async function obterTopico(
+  topico: string,
+  pagina: number
+): Promise<Story[]> {
+  const req = await obter(`/${topico}/${pagina}.json`);
+
   return req;
 }
