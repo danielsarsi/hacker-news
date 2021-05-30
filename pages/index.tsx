@@ -1,41 +1,35 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Layout from "../components/layout";
-import { Item, obterItem, obterTopStories } from "../lib/api";
+import { obterNews, Story } from "../lib/api";
 import styleInicio from "../styles/Inicio.module.css";
 import styleItem from "../styles/Item.module.css";
 
-export const MAXIMO_ITENS = 30;
-
 interface InicioProps {
-  itens: Item[];
+  news: Story[];
 }
 
 export const getServerSideProps: GetServerSideProps<InicioProps> = async () => {
-  const topStories = await obterTopStories();
-
-  // limita o número de itens
-  const itensDaPagina = topStories.slice(0, MAXIMO_ITENS);
-  const itens = await Promise.all(itensDaPagina.map(obterItem));
+  const news = await obterNews();
 
   return {
     props: {
-      itens,
+      news,
     },
     // revalidate: 60,
   };
 };
 
 function Inicio({
-  itens,
+  news,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <Layout>
       <main>
         <ol className={styleInicio.lista}>
-          {itens.map((item) => (
+          {news.map((item) => (
             <li key={item.id}>
               <article className={styleItem.item}>
-                <p className={styleItem.pontos}>{item.score}</p>
+                <p className={styleItem.pontos}>{item.points ?? 0}</p>
                 <h1 className={styleItem.titulo}>
                   <a
                     href={item.url ?? `item/${item.id}`}
@@ -45,11 +39,11 @@ function Inicio({
                   </a>
                 </h1>
                 <footer className={styleItem.informacoes}>
-                  <span>{item.by}</span>
+                  {item.user && <span>{item.user}</span>}
                   <a href={`item/${item.id}`}>
-                    {item.descendants === 1
+                    {item.comments_count === 1
                       ? `1 comentário`
-                      : `${item.descendants ?? 0} comentários`}
+                      : `${item.comments_count ?? 0} comentários`}
                   </a>
                 </footer>
               </article>

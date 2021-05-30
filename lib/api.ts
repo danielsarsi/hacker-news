@@ -1,21 +1,35 @@
-const API_URL = "https://hacker-news.firebaseio.com/v0";
+const API_URL = "https://api.hnpwa.com/v0";
+
+// https://github.com/davideast/hnpwa-api/blob/main/src/api/interfaces.ts
+export interface Story {
+  id: number;
+  title: string;
+  points?: number | null;
+  user?: string | null;
+  time: number;
+  time_ago: string;
+  comments_count: number;
+  type: string;
+  url?: string;
+  domain?: string;
+}
 
 export interface Item {
   id: number;
-  deleted?: boolean;
-  type: "job" | "story" | "comment" | "poll" | "pollopt";
-  by: string;
-  time: number;
-  text?: string;
-  dead?: boolean;
-  parent?: Item;
-  poll?: number;
-  kids?: number[];
-  url: string;
-  score?: number;
   title: string;
-  parts?: number[];
-  descendants?: number;
+  points: number | null;
+  user: string | null;
+  time: number;
+  time_ago: string;
+  content: string;
+  deleted?: boolean;
+  dead?: boolean;
+  type: string;
+  url?: string;
+  domain?: string;
+  comments: Item[];
+  level: number;
+  comments_count: number;
 }
 
 export async function obter(url: string) {
@@ -28,7 +42,7 @@ export async function obterItem(id: number): Promise<Item> {
   return req;
 }
 
-export async function obterTopStories(): Promise<number[]> {
-  const req = await obter(`/topstories.json`);
+export async function obterNews(): Promise<Story[]> {
+  const req = await obter(`/news/1.json`);
   return req;
 }

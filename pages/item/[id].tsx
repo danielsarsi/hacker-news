@@ -14,27 +14,18 @@ interface ItemEncapsulado {
   comentarios?: ItemEncapsulado[];
 }
 
-const encapsularItem = async (item: Item) => {
+const encapsularItem = (item: Item) => {
   const itemEncapsulado: ItemEncapsulado = {
     item,
     dataFormatada: formatarData(item.time),
   };
 
-  if (item.text) {
-    itemEncapsulado.textoSanitizado = DOMPurify.sanitize(item.text);
+  if (item.content) {
+    itemEncapsulado.textoSanitizado = DOMPurify.sanitize(item.content);
   }
 
-  if (item.kids) {
-    const proximosItens = await Promise.all(item.kids.map(obterItem));
-    // Foi importante filtrar itens com text e time, pois às vezes a API retorna
-    // null.
-    const proximosItensEncapsulados = await Promise.all(
-      proximosItens
-        .filter((item) => item && item.text && item.time)
-        .map(encapsularItem)
-    );
-
-    itemEncapsulado.comentarios = proximosItensEncapsulados;
+  if (item.comments_count > 0) {
+    itemEncapsulado.comentarios = item.comments.map(encapsularItem);
   }
 
   return itemEncapsulado;
@@ -68,7 +59,7 @@ export const getServerSideProps: GetServerSideProps<PaginaItemProps> = async ({
   }
 
   const item = await obterItem(+params.id);
-  const itemEncapsulado = await encapsularItem(item);
+  const itemEncapsulado = encapsularItem(item);
 
   return {
     props: { itemEncapsulado },
@@ -88,7 +79,7 @@ function PaginaItem({
               {parser(textoSanitizado)}
             </section>
             <footer className={styles.informacoes}>
-              <span>{item.by}</span>
+              {item.user && <span>{item.user}</span>}
               <span>{dataFormatada}</span>
             </footer>
             {comentarios && renderizarItens(comentarios)}
@@ -106,12 +97,12 @@ function PaginaItem({
   return (
     <Layout
       titulo={itemEncapsulado.item.title}
-      descricao={`(${itemEncapsulado.item.score}) por ${itemEncapsulado.item.by}`}
+      descricao={`(${itemEncapsulado.item.points}) por ${itemEncapsulado.item.user}`}
     >
       <main>
         <article>
           <section className={styles.item}>
-            <p className={styles.pontos}>{itemEncapsulado.item.score}</p>
+            <p className={styles.pontos}>{itemEncapsulado.item.points}</p>
             <h1 className={styles.titulo}>
               <a
                 href={
@@ -123,7 +114,9 @@ function PaginaItem({
               </a>
             </h1>
             <footer className={styles.informacoes}>
-              <span>{itemEncapsulado.item.by}</span>
+              {itemEncapsulado.item.user && (
+                <span>{itemEncapsulado.item.user}</span>
+              )}
               <span>{itemEncapsulado.dataFormatada}</span>
             </footer>
           </section>
