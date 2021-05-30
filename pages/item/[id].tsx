@@ -50,6 +50,10 @@ export const getServerSideProps: GetServerSideProps<PaginaItemProps> = async ({
 
   const item = await obterItem(+params.id);
 
+  if (item.type === "job") {
+    return { notFound: true };
+  }
+
   return {
     props: { item: processarItem(item) },
     // revalidate: 60,
@@ -64,8 +68,8 @@ function PaginaItem({
       <article className={styles.comentario} key={item.id}>
         <section className={styles.conteudo}>{parser(item.content)}</section>
         <footer className={styles.informacoes}>
-          {item.user && <span>{item.user}</span>}
           <span>{item.time_ago}</span>
+          {item.user && <span>{item.user}</span>}
         </footer>
         {item.comments && renderizarComentario(item.comments)}
       </article>
@@ -86,8 +90,8 @@ function PaginaItem({
               </a>
             </h1>
             <footer className={styles.informacoes}>
-              {item.user && <span>{item.user}</span>}
               <span>{item.time_ago}</span>
+              <span>{item.user}</span>
             </footer>
           </section>
 

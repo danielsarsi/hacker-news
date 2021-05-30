@@ -1,6 +1,7 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Layout from "../components/layout";
 import { obterNews, Story } from "../lib/api";
+import { formatarData } from "../lib/util";
 import styleInicio from "../styles/Inicio.module.css";
 import styleItem from "../styles/Item.module.css";
 
@@ -9,7 +10,12 @@ interface InicioProps {
 }
 
 export const getServerSideProps: GetServerSideProps<InicioProps> = async () => {
-  const news = await obterNews();
+  let news = await obterNews();
+
+  news = news.map((story) => {
+    story.time_ago = formatarData(story.time);
+    return story;
+  });
 
   return {
     props: {
@@ -26,25 +32,30 @@ function Inicio({
     <Layout>
       <main>
         <ol className={styleInicio.lista}>
-          {news.map((item) => (
-            <li key={item.id}>
+          {news.map((story) => (
+            <li key={story.id}>
               <article className={styleItem.item}>
-                <p className={styleItem.pontos}>{item.points ?? 0}</p>
+                <p className={styleItem.pontos}>
+                  {story.points ?? (story.type === "job" ? <>&#8212;</> : 0)}
+                </p>
                 <h1 className={styleItem.titulo}>
                   <a
-                    href={item.url ?? `item/${item.id}`}
-                    className={styleItem[item.type]}
+                    href={story.url ?? `item/${story.id}`}
+                    className={styleItem[story.type]}
                   >
-                    {item.title}
+                    {story.title}
                   </a>
                 </h1>
                 <footer className={styleItem.informacoes}>
-                  {item.user && <span>{item.user}</span>}
-                  <a href={`item/${item.id}`}>
-                    {item.comments_count === 1
-                      ? `1 comentário`
-                      : `${item.comments_count ?? 0} comentários`}
-                  </a>
+                  <span>{story.time_ago}</span>
+                  {story.user && <span>{story.user}</span>}
+                  {story.type === "link" && (
+                    <a href={`item/${story.id}`}>
+                      {story.comments_count === 1
+                        ? `1 comentário`
+                        : `${story.comments_count ?? 0} comentários`}
+                    </a>
+                  )}
                 </footer>
               </article>
             </li>
