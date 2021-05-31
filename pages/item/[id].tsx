@@ -1,6 +1,7 @@
 import parser from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import Link from "next/link";
 import Layout from "../../components/layout";
 import { Item, obterItem } from "../../lib/api";
 import { formatarData } from "../../lib/util";
@@ -74,6 +75,13 @@ function PaginaItem({
             <footer className={styles.informacoes}>
               <span>{item.time_ago}</span>
               <span>{item.user}</span>
+              <Link href={`/item/${item.id}`}>
+                <a>
+                  {item.comments_count === 1
+                    ? `1 comentário`
+                    : `${item.comments_count ?? 0} comentários`}
+                </a>
+              </Link>
             </footer>
           </section>
 
