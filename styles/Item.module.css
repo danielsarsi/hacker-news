@@ -32,7 +32,8 @@
 .item:hover .informacoes {
   color: inherit;
 }
-.comentario:hover > .informacoes {
+.comentario:hover > .informacoes,
+.comentario:focus > .informacoes {
   color: inherit;
 }
 
