@@ -1,5 +1,5 @@
 module.exports = {
-  async redirects() {
+  redirects() {
     return [
       {
         source: '/',
@@ -8,7 +8,7 @@ module.exports = {
       },
       {
         source: '/:topico(news|newest|ask|show|jobs)',
-        destination: '/:topico/1', // Matched parameters can be used in the destination
+        destination: '/:topico/1',
         permanent: false,
       },
     ]
