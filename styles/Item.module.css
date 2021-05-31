@@ -24,6 +24,7 @@
   color: #222;
   margin-top: 0.5ch;
   display: flex;
+  flex-wrap: wrap;
   column-gap: 3ch;
   color: #666;
   transition: color 0.1s ease;

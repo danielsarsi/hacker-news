@@ -4,6 +4,7 @@
   margin: 0;
   display: flex;
   column-gap: 3ch;
+  flex-wrap: wrap;
 }
 
 .ativo a {

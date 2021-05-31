@@ -16,8 +16,8 @@
 }
 
 .circulo {
-  width: 4ch;
-  height: 4ch;
+  min-width: 4ch;
+  min-height: 4ch;
   background-color: var(--texto);
   border-radius: 100%;
 }
