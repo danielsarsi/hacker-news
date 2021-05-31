@@ -65,7 +65,8 @@
   transition: border-left-color 0.1s ease;
 }
 
-.comentario:hover {
+.comentario:hover,
+.comentario:focus {
   border-left-color: #222;
 }
 

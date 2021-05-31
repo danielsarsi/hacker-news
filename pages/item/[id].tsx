@@ -48,7 +48,7 @@ function PaginaItem({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const renderizarComentario = (itens: Item[]) =>
     itens.map((item) => (
-      <article className={styles.comentario} key={item.id}>
+      <article tabIndex={0} className={styles.comentario} key={item.id}>
         <section className={styles.conteudo}>{parser(item.content)}</section>
         <footer className={styles.informacoes}>
           <span>{item.time_ago}</span>
