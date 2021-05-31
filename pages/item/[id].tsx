@@ -1,8 +1,8 @@
 import parser from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import Head from "next/head";
 import Link from "next/link";
-import Layout from "../../components/layout";
 import { Item, obterItem } from "../../lib/api";
 import { formatarData } from "../../lib/util";
 import styles from "../../styles/Item.module.css";
@@ -59,7 +59,14 @@ function PaginaItem({
     ));
 
   return (
-    <Layout titulo={item.title} descricao={`(${item.points}) por ${item.user}`}>
+    <>
+      <Head>
+        <title>{`${item.title} / hacker news`}</title>
+        <meta
+          name="description"
+          content={`(${item.points}) por ${item.user}`}
+        ></meta>
+      </Head>
       <main>
         <article>
           <section className={styles.item}>
@@ -71,8 +78,8 @@ function PaginaItem({
                 </Link>
               ) : (
                 <a href={item.url} className={styles[item.type]}>
-                {item.title}
-              </a>
+                  {item.title}
+                </a>
               )}
             </h1>
             <footer className={styles.informacoes}>
@@ -101,7 +108,7 @@ function PaginaItem({
           )}
         </article>
       </main>
-    </Layout>
+    </>
   );
 }
 

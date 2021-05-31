@@ -1,6 +1,6 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import Head from "next/head";
 import Link from "next/link";
-import Layout from "../../components/layout";
 import { obterTopico, Story } from "../../lib/api";
 import { formatarData } from "../../lib/util";
 import styleInicio from "../../styles/Inicio.module.css";
@@ -8,6 +8,7 @@ import styleItem from "../../styles/Item.module.css";
 
 interface InicioProps {
   news: Story[];
+  topico: string;
 }
 
 export const getServerSideProps: GetServerSideProps<InicioProps> = async ({
@@ -29,6 +30,7 @@ export const getServerSideProps: GetServerSideProps<InicioProps> = async ({
           story.time_ago = formatarData(story.time);
           return story;
         }),
+        topico: params.topico as string,
       },
     };
   }
@@ -38,9 +40,13 @@ export const getServerSideProps: GetServerSideProps<InicioProps> = async ({
 
 function Inicio({
   news,
+  topico,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
-    <Layout>
+    <>
+      <Head>
+        <title>{`${topico} / hacker news`}</title>
+      </Head>
       <main>
         <ol className={styleInicio.lista}>
           {news.map((story) => (
@@ -55,9 +61,9 @@ function Inicio({
                       <a className={styleItem[story.type]}>{story.title}</a>
                     </Link>
                   ) : (
-                  <a href={story.url} className={styleItem[story.type]}>
-                    {story.title}
-                  </a>
+                    <a href={story.url} className={styleItem[story.type]}>
+                      {story.title}
+                    </a>
                   )}
                 </h1>
                 <footer className={styleItem.informacoes}>
@@ -78,7 +84,7 @@ function Inicio({
           ))}
         </ol>
       </main>
-    </Layout>
+    </>
   );
 }
 

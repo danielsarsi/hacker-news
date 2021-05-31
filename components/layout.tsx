@@ -1,25 +1,52 @@
 import Head from "next/head";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import Header from "./header";
 
 interface LayoutProps {
   children?: JSX.Element;
-  titulo?: string;
-  descricao?: string;
 }
 
-function Layout({ children, titulo, descricao }: LayoutProps) {
+function Layout({ children }: LayoutProps) {
+  const router = useRouter();
+  const [carregando, estaCarregando] = useState(false);
+
+  useEffect(() => {
+    const eventoComeco = (url: string) => {
+      if (url !== router.asPath) {
+        estaCarregando(true);
+      }
+    };
+
+    const eventoCompletado = (url: string) => {
+      if (url !== router.asPath) {
+        estaCarregando(false);
+      }
+    };
+
+    router.events.on("routeChangeStart", eventoComeco);
+    router.events.on("routeChangeComplete", eventoCompletado);
+    router.events.on("routeChangeError", eventoCompletado);
+
+    return () => {
+      router.events.off("routeChangeStart", eventoComeco);
+      router.events.off("routeChangeComplete", eventoCompletado);
+      router.events.off("routeChangeError", eventoCompletado);
+    };
+  }, [carregando]);
+
   return (
     <>
       <Head>
-        <title>{titulo ? `${titulo} / hacker news` : `hacker news`}</title>
+        <title>hacker news</title>
         <meta
           name="description"
-          content={descricao ?? "(mais) uma versão de news.ycombinator.com"}
+          content="(mais) uma versão de news.ycombinator.com"
         ></meta>
         <link rel="icon" type="image/svg+xml" href="/circle.svg" />
         <link rel="alternate icon" href="/favicon.ico" />
       </Head>
-      <Header />
+      <Header carregando={carregando} />
       {children}
     </>
   );
