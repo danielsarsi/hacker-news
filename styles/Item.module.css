@@ -40,12 +40,8 @@
   text-decoration-color: blue;
 }
 
-.poll:hover {
-  text-decoration-color: red;
-}
-
-.comment:hover {
-  text-decoration-color: green;
+.ask:hover {
+  text-decoration-color: yellow;
 }
 
 .conteudo {

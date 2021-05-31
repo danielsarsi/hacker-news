@@ -65,12 +65,15 @@ function PaginaItem({
           <section className={styles.item}>
             <p className={styles.pontos}>{item.points}</p>
             <h1 className={styles.titulo}>
-              <a
-                href={item.url ?? `item/${item.id}`}
-                className={styles[item.type]}
-              >
+              {item.url?.includes("item?id=") ? (
+                <Link href={`/item/${item.id}`}>
+                  <a className={styles[item.type]}>{item.title}</a>
+                </Link>
+              ) : (
+                <a href={item.url} className={styles[item.type]}>
                 {item.title}
               </a>
+              )}
             </h1>
             <footer className={styles.informacoes}>
               <span>{item.time_ago}</span>

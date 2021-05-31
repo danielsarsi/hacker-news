@@ -50,14 +50,20 @@ function Inicio({
                   {story.points ?? (story.type === "job" ? <>&#8212;</> : 0)}
                 </p>
                 <h1 className={styleItem.titulo}>
+                  {story.url?.includes("item?id=") ? (
+                    <Link href={`/item/${story.id}`}>
+                      <a className={styleItem[story.type]}>{story.title}</a>
+                    </Link>
+                  ) : (
                   <a href={story.url} className={styleItem[story.type]}>
                     {story.title}
                   </a>
+                  )}
                 </h1>
                 <footer className={styleItem.informacoes}>
                   <span>{story.time_ago}</span>
                   {story.user && <span>{story.user}</span>}
-                  {story.type === "link" && (
+                  {story.type !== "job" && (
                     <Link href={`/item/${story.id}`}>
                       <a>
                         {story.comments_count === 1
