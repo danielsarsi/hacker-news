@@ -73,8 +73,8 @@ function Inicio({
                     <Link href={`/item/${story.id}`}>
                       <a>
                         {story.comments_count === 1
-                          ? `1 comentário`
-                          : `${story.comments_count ?? 0} comentários`}
+                          ? `1 comment`
+                          : `${story.comments_count ?? 0} comments`}
                       </a>
                     </Link>
                   )}

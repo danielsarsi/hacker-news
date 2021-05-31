@@ -92,8 +92,8 @@ function PaginaItem({
               <Link href={`/item/${item.id}`}>
                 <a>
                   {item.comments_count === 1
-                    ? `1 comentário`
-                    : `${item.comments_count ?? 0} comentários`}
+                    ? `1 comment`
+                    : `${item.comments_count ?? 0} comments`}
                 </a>
               </Link>
             </footer>

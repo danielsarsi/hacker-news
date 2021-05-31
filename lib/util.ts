@@ -1,7 +1,6 @@
-const intl = new Intl.DateTimeFormat("pt-BR", {
+const intl = new Intl.DateTimeFormat("en-US", {
   timeStyle: "short",
   dateStyle: "short",
-  timeZone: "America/Sao_Paulo",
 });
 
 export function formatarData(tempo: number) {
