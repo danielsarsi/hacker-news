@@ -34,6 +34,10 @@ export const getServerSideProps: GetServerSideProps<PaginaItemProps> = async ({
 
   const item = await obterItem(+params.id);
 
+  if (!item) {
+    return { notFound: true };
+  }
+
   if (item.type === "job") {
     return { notFound: true };
   }
