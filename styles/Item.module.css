@@ -1,7 +1,7 @@
 .item {
   margin: 3ch 0;
   display: grid;
-  grid-template-columns: 6ch 1fr;
+  grid-template-columns: 7ch 1fr;
   grid-template-rows: auto auto;
 }
 
@@ -55,7 +55,7 @@
 
 .comentarios {
   margin: 3ch 0;
-  margin-left: calc(6ch - 1ch - 1ch - 2px);
+  margin-left: calc(7ch - 1ch - 1ch - 2px);
 }
 
 .comentario {

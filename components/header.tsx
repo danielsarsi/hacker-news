@@ -1,5 +1,5 @@
-import Link from "next/link";
 import styles from "../styles/Header.module.css";
+import Nav from "./nav";
 
 interface HeaderProps {
   carregando: boolean;
@@ -8,16 +8,13 @@ interface HeaderProps {
 function Header({ carregando }: HeaderProps) {
   return (
     <header className={styles.cabecalho}>
-      <Link href="/news/1">
-        <a>
-          <div
-            className={[
-              styles.circulo,
-              carregando && styles.circulo_carregando,
-            ].join(" ")}
-          ></div>
-        </a>
-      </Link>
+      <div
+        className={[
+          styles.circulo,
+          carregando && styles.circulo_carregando,
+        ].join(" ")}
+      ></div>
+      <Nav />
     </header>
   );
 }
