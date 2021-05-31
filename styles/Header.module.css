@@ -1,4 +1,7 @@
 .cabecalho {
+  --cabecalho-gradiente-topo: rgb(255, 255, 255, 1);
+  --cabecalho-gradiente-inferior: rgb(255, 255, 255, 0);
+
   padding: 8ch;
   display: flex;
   position: fixed;
@@ -6,13 +9,16 @@
   column-gap: 3ch;
   top: 0;
   width: 100%;
-  background: linear-gradient(rgb(255, 255, 255, 1) 35%, rgb(255, 255, 255, 0));
+  background: linear-gradient(
+    var(--cabecalho-gradiente-topo) 35%,
+    var(--cabecalho-gradiente-inferior)
+  );
 }
 
 .circulo {
   width: 4ch;
   height: 4ch;
-  background-color: #000;
+  background-color: var(--texto);
   border-radius: 100%;
 }
 
@@ -38,5 +44,12 @@
 @media screen and (max-width: 600px) {
   .cabecalho {
     padding: 5ch 3ch;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .cabecalho {
+    --cabecalho-gradiente-topo: rgba(0, 0, 0, 1);
+    --cabecalho-gradiente-inferior: rgb(0, 0, 0, 0);
   }
 }

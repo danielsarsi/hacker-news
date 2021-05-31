@@ -59,16 +59,18 @@
 }
 
 .comentario {
+  --comentario-borda: #eee;
+
   margin: 3ch 0;
   margin-left: 1ch;
   padding-left: 1ch;
-  border-left: 2px solid #eee;
+  border-left: 2px solid var(--comentario-borda);
   transition: border-left-color 0.1s ease;
 }
 
 .comentario:hover,
 .comentario:focus {
-  border-left-color: #222;
+  border-left-color: var(--texto);
 }
 
 .comentario .conteudo {
@@ -91,5 +93,11 @@
   .comentario {
     margin-left: 0;
     padding-left: 1ch;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .comentario {
+    --comentario-borda: #222;
   }
 }
