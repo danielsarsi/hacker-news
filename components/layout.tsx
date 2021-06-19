@@ -1,10 +1,10 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import Header from "./header";
 
 interface LayoutProps {
-  children?: JSX.Element;
+  children?: ReactNode;
 }
 
 function Layout({ children }: LayoutProps) {
