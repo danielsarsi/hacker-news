@@ -33,7 +33,7 @@ function Layout({ children }: LayoutProps) {
       router.events.off("routeChangeComplete", eventoCompletado);
       router.events.off("routeChangeError", eventoCompletado);
     };
-  }, [carregando]);
+  }, [router.asPath, router.events]);
 
   return (
     <>
