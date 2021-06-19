@@ -12,7 +12,7 @@ function Nav() {
     <nav>
       <ul className={styles.navegacao}>
         {topicos.map((t) => (
-          <li className={topico === t ? styles.ativo : undefined}>
+          <li key={t} className={topico === t ? styles.ativo : undefined}>
             <Link href={`/${t}/1`}>
               <a>{t}</a>
             </Link>
