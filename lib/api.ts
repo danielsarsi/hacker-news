@@ -32,6 +32,17 @@ export interface Item {
   comments_count: number;
 }
 
+export interface API {
+  name: string;
+  endpoints: APIEndpoints[];
+}
+
+export interface APIEndpoints {
+  topic: string;
+  url: string;
+  maxPages: number;
+}
+
 export async function obter(url: string) {
   const req = await fetch(`${API_URL}${url}`);
 
