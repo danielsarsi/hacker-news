@@ -15,32 +15,6 @@
   );
 }
 
-.circulo {
-  min-width: 4ch;
-  min-height: 4ch;
-  background-color: var(--texto);
-  border-radius: 100%;
-}
-
-.circulo_carregando {
-  animation: pulsa 0.6s infinite ease;
-}
-
-@keyframes pulsa {
-  from {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(0.9);
-    opacity: 0.2;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
 @media screen and (max-width: 600px) {
   .cabecalho {
     padding: 5ch 3ch;

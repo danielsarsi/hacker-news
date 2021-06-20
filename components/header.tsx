@@ -1,19 +1,11 @@
 import styles from "../styles/Header.module.css";
 import Nav from "./nav";
+import Circulo from "./circulo";
 
-interface HeaderProps {
-  carregando: boolean;
-}
-
-function Header({ carregando }: HeaderProps) {
+function Header() {
   return (
     <header className={styles.cabecalho}>
-      <div
-        className={[
-          styles.circulo,
-          carregando && styles.circulo_carregando,
-        ].join(" ")}
-      ></div>
+      <Circulo />
       <Nav />
     </header>
   );
