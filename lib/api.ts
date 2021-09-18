@@ -52,7 +52,7 @@ export async function obter<T>(url: string) {
   return req.json() as Promise<T>;
 }
 
-export async function obterTopicos() {
+export async function obterAPI() {
   return obter<API>("/");
 }
 

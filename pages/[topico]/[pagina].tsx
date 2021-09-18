@@ -8,12 +8,12 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
-import { obterTopico, obterTopicos, Story } from "../../lib/api";
+import { obterTopico, obterAPI, Story } from "../../lib/api";
 import styleInicio from "../../styles/Inicio.module.css";
 import styleItem from "../../styles/Item.module.css";
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const topicos = await obterTopicos();
+  const topicos = await obterAPI();
 
   const paths: GetStaticPathsResult["paths"] = [];
 
