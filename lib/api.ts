@@ -38,10 +38,14 @@ export interface API {
 }
 
 export interface APIEndpoints {
-  topic: string;
+  topic: Topicos;
   url: string;
   maxPages: number;
 }
+
+export const TOPICOS = ["news", "newest", "ask", "show", "jobs"] as const;
+
+export type Topicos = typeof TOPICOS[number];
 
 export async function obter<T>(url: string) {
   const req = await fetch(`${API_URL}${url}`);
