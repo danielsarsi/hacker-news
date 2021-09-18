@@ -43,22 +43,19 @@ export interface APIEndpoints {
   maxPages: number;
 }
 
-export async function obter(url: string) {
+export async function obter<T>(url: string) {
   const req = await fetch(`${API_URL}${url}`);
-
-  return req.json();
+  return req.json() as Promise<T>;
 }
 
-export async function obterItem(id: number): Promise<Item> {
-  const req = await obter(`/item/${id}.json`);
-  return req;
+export async function obterTopicos() {
+  return obter<API>("/");
 }
 
-export async function obterTopico(
-  topico: string,
-  pagina: number
-): Promise<Story[]> {
-  const req = await obter(`/${topico}/${pagina}.json`);
+export async function obterTopico(topico: string, pagina: number) {
+  return obter<Story[]>(`/${topico}/${pagina}.json`);
+}
 
-  return req;
+export async function obterItem(id: number) {
+  return obter<Item>(`/item/${id}.json`);
 }

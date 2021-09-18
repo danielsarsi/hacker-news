@@ -1,48 +1,75 @@
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import type {
+  GetStaticPaths,
+  GetStaticPathsResult,
+  GetStaticProps,
+} from "next";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import useSWR from "swr";
 
-import { obterTopico, Story } from "../../lib/api";
-import { formatarData } from "../../lib/util";
+import { obterTopico, obterTopicos, Story } from "../../lib/api";
 import styleInicio from "../../styles/Inicio.module.css";
 import styleItem from "../../styles/Item.module.css";
 
-interface InicioProps {
-  news: Story[];
-  topico: string;
-}
+export const getStaticPaths: GetStaticPaths = async () => {
+  const topicos = await obterTopicos();
 
-export const getServerSideProps: GetServerSideProps<InicioProps> = async ({
+  const paths: GetStaticPathsResult["paths"] = [];
+
+  for (const endpoint of topicos.endpoints) {
+    const { topic, maxPages } = endpoint;
+
+    for (let index = 0; index < maxPages; index++) {
+      paths.push({ params: { topico: topic, pagina: index + 1 + "" } });
+    }
+  }
+
+  return {
+    paths,
+    fallback: false,
+  };
+};
+
+export const getStaticProps: GetStaticProps<InicioProps> = async ({
   params,
 }) => {
-  if (
-    params?.pagina &&
-    ["news", "newest", "ask", "show", "jobs"].includes(params?.topico as string)
-  ) {
-    const news = await obterTopico(params.topico as string, +params.pagina);
+  if (!params || !params.topico) {
+    return { redirect: { destination: "/", permanent: false } };
+  }
 
-    if (news.length === 0) {
-      return { notFound: true };
-    }
-
+  if (!params.pagina) {
     return {
-      props: {
-        news: news.map((story) => {
-          story.time_ago = formatarData(story.time);
-          return story;
-        }),
-        topico: params.topico as string,
-      },
+      redirect: { destination: `/${params.topico}/1`, permanent: false },
     };
   }
 
-  return { notFound: true };
+  const news = await obterTopico(params.topico as string, +params.pagina);
+
+  if (news.length === 0) {
+    return { notFound: true };
+  }
+
+  return {
+    props: {
+      fallbackData: news,
+    },
+    revalidate: 60,
+  };
 };
 
-function Inicio({
-  news,
-  topico,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+interface InicioProps {
+  fallbackData: Story[];
+}
+
+function Inicio({ fallbackData }: InicioProps) {
+  const router = useRouter();
+  const { topico, pagina } = router.query;
+
+  const { data } = useSWR([topico, pagina], obterTopico, {
+    fallbackData,
+  });
+
   return (
     <>
       <Head>
@@ -50,7 +77,7 @@ function Inicio({
       </Head>
       <main>
         <ol className={styleInicio.lista}>
-          {news.map((story) => (
+          {data?.map((story) => (
             <li key={story.id}>
               <article className={styleItem.item}>
                 <p className={styleItem.pontos}>
