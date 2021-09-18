@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR from "swr";
+
 import { API, obter } from "../lib/api";
 import styles from "../styles/Nav.module.css";
 

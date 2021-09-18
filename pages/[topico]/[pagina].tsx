@@ -1,6 +1,7 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import Link from "next/link";
+
 import { obterTopico, Story } from "../../lib/api";
 import { formatarData } from "../../lib/util";
 import styleInicio from "../../styles/Inicio.module.css";

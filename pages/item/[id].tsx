@@ -3,6 +3,7 @@ import DOMPurify from "isomorphic-dompurify";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import Link from "next/link";
+
 import { Item, obterItem } from "../../lib/api";
 import { formatarData } from "../../lib/util";
 import styles from "../../styles/Item.module.css";

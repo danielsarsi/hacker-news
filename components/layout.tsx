@@ -1,6 +1,6 @@
 import Head from "next/head";
-import { useRouter } from "next/router";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode } from "react";
+
 import Header from "./header";
 
 interface LayoutProps {
