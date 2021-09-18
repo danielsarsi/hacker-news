@@ -1,6 +1,6 @@
 import styles from "../styles/Header.module.css";
+import Circulo from "./Circulo";
 import Nav from "./Nav";
-import Circulo from "./circulo";
 
 function Header() {
   return (
