@@ -11,21 +11,17 @@ import HTMLParser from "../../components/HTMLParser";
 import ItemComment from "../../components/ItemComment";
 import ItemFooter from "../../components/ItemFooter";
 import ItemHeader from "../../components/ItemHeader";
-import { Item, obterAPI, obterItem, obterTopico } from "../../lib/api";
+import { Item, obterItem, obterTopico, TOPICOS } from "../../lib/api";
 import styles from "../../styles/Item.module.css";
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const topicos = await obterAPI();
-
   const paths: GetStaticPathsResult["paths"] = [];
 
-  for (const endpoint of topicos.endpoints) {
-    const { topic } = endpoint;
+  for (const topic of TOPICOS) {
+    const stories = await obterTopico(topic, 1);
 
-    const topico = await obterTopico(topic, 1);
-
-    for (const item of topico) {
-      paths.push({ params: { id: item.id + "" } });
+    for (const story of stories) {
+      paths.push({ params: { id: story.id + "" } });
     }
   }
 

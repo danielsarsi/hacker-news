@@ -9,7 +9,7 @@ import useSWR from "swr";
 
 import ItemFooter from "../../components/ItemFooter";
 import ItemHeader from "../../components/ItemHeader";
-import { obterTopico, obterAPI, Story } from "../../lib/api";
+import { obterTopico, obterAPI, Story, TOPICOS } from "../../lib/api";
 import styleInicio from "../../styles/Inicio.module.css";
 import styleItem from "../../styles/Item.module.css";
 
@@ -21,8 +21,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
   for (const endpoint of topicos.endpoints) {
     const { topic, maxPages } = endpoint;
 
-    for (let index = 0; index < maxPages; index++) {
-      paths.push({ params: { topico: topic, pagina: index + 1 + "" } });
+    if (TOPICOS.includes(topic)) {
+      for (let index = 0; index < maxPages; index++) {
+        paths.push({ params: { topico: topic, pagina: index + 1 + "" } });
+      }
     }
   }
 
