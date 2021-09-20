@@ -61,5 +61,5 @@ export async function apiTopic(topic: string, page: number) {
 }
 
 export async function apiItem(id: number) {
-  return api<Item>(`/item/${id}.json`);
+  return api<Item | null>(`/item/${id}.json`);
 }
