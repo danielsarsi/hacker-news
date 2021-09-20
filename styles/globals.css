@@ -1,33 +1,33 @@
 @font-face {
-  font-weight: normal;
+  font-display: swap;
   font-family: "Space Mono";
   font-style: italic;
+  font-weight: normal;
   src: url("/space-mono/SpaceMono-Italic.woff2") format("woff2");
-  font-display: swap;
 }
 
 @font-face {
-  font-weight: bold;
+  font-display: swap;
   font-family: "Space Mono";
   font-style: italic;
-  src: url("/space-mono/SpaceMono-BoldItalic.woff2") format("woff2");
-  font-display: swap;
-}
-
-@font-face {
   font-weight: bold;
-  font-family: "Space Mono";
-  font-style: normal;
-  src: url("/space-mono/SpaceMono-Bold.woff2") format("woff2");
-  font-display: swap;
+  src: url("/space-mono/SpaceMono-BoldItalic.woff2") format("woff2");
 }
 
 @font-face {
-  font-weight: normal;
+  font-display: swap;
   font-family: "Space Mono";
   font-style: normal;
-  src: url("/space-mono/SpaceMono-Regular.woff2") format("woff2");
+  font-weight: bold;
+  src: url("/space-mono/SpaceMono-Bold.woff2") format("woff2");
+}
+
+@font-face {
   font-display: swap;
+  font-family: "Space Mono";
+  font-style: normal;
+  font-weight: normal;
+  src: url("/space-mono/SpaceMono-Regular.woff2") format("woff2");
 }
 
 :root {
@@ -36,18 +36,18 @@
 
 html,
 body {
-  margin: 0;
   padding: 0;
+  margin: 0;
   color: var(--text);
-  font-size: 13px;
   font-family: "Space Mono", monospace;
+  font-size: 13px;
 }
 
 a {
   color: inherit;
   text-decoration-color: transparent;
-  text-decoration-thickness: 0.25ch;
   text-decoration-skip-ink: none;
+  text-decoration-thickness: 0.25ch;
   transition: text-decoration-color 0.05s ease;
 }
 

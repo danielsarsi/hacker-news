@@ -1,8 +1,8 @@
 .nav {
   display: flex;
   flex-wrap: wrap;
-  margin: 0;
   padding: 0;
+  margin: 0;
   column-gap: 3ch;
   list-style: none;
 }

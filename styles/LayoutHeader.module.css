@@ -4,15 +4,15 @@
   position: fixed;
   top: 0;
   display: flex;
-  align-items: center;
   width: 100%;
+  align-items: center;
   padding: 8ch;
-  column-gap: 3ch;
   background: linear-gradient(
     to bottom,
     var(--header-gradient-top) 35%,
     var(--header-gradient-bottom)
   );
+  column-gap: 3ch;
 }
 
 @media screen and (max-width: 600px) {
