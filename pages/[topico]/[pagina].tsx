@@ -4,10 +4,11 @@ import type {
   GetStaticProps,
 } from "next";
 import Head from "next/head";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
+import ItemFooter from "../../components/ItemFooter";
+import ItemHeader from "../../components/ItemHeader";
 import { obterTopico, obterAPI, Story } from "../../lib/api";
 import styleInicio from "../../styles/Inicio.module.css";
 import styleItem from "../../styles/Item.module.css";
@@ -27,7 +28,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths,
-    fallback: false,
+    fallback: "blocking",
   };
 };
 
@@ -80,33 +81,8 @@ function Inicio({ fallbackData }: InicioProps) {
           {data?.map((story) => (
             <li key={story.id}>
               <article className={styleItem.item}>
-                <p className={styleItem.pontos}>
-                  {story.points ?? (story.type === "job" ? <>&#8212;</> : 0)}
-                </p>
-                <h1 className={styleItem.titulo}>
-                  {story.url?.includes("item?id=") ? (
-                    <Link href={`/item/${story.id}`}>
-                      <a className={styleItem[story.type]}>{story.title}</a>
-                    </Link>
-                  ) : (
-                    <a href={story.url} className={styleItem[story.type]}>
-                      {story.title}
-                    </a>
-                  )}
-                </h1>
-                <footer className={styleItem.informacoes}>
-                  <span>{story.time_ago}</span>
-                  {story.user && <span>{story.user}</span>}
-                  {story.type !== "job" && (
-                    <Link href={`/item/${story.id}`}>
-                      <a>
-                        {story.comments_count === 1
-                          ? `1 comment`
-                          : `${story.comments_count ?? 0} comments`}
-                      </a>
-                    </Link>
-                  )}
-                </footer>
+                <ItemHeader item={story} />
+                <ItemFooter item={story} />
               </article>
             </li>
           ))}

@@ -1,32 +1,43 @@
-import parser from "html-react-parser";
-import DOMPurify from "isomorphic-dompurify";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import type {
+  GetStaticPaths,
+  GetStaticPathsResult,
+  GetStaticProps,
+} from "next";
 import Head from "next/head";
-import Link from "next/link";
+import { useRouter } from "next/router";
+import useSWR from "swr";
 
-import { Item, obterItem } from "../../lib/api";
-import { formatarData } from "../../lib/util";
+import HTMLParser from "../../components/HTMLParser";
+import ItemComment from "../../components/ItemComment";
+import ItemFooter from "../../components/ItemFooter";
+import ItemHeader from "../../components/ItemHeader";
+import { Item, obterAPI, obterItem, obterTopico } from "../../lib/api";
 import styles from "../../styles/Item.module.css";
 
-const processarItem = (item: Item) => {
-  item.time_ago = formatarData(item.time);
+export const getStaticPaths: GetStaticPaths = async () => {
+  const topicos = await obterAPI();
 
-  if (item.content) {
-    item.content = DOMPurify.sanitize(item.content);
+  const paths: GetStaticPathsResult["paths"] = [];
+
+  for (const endpoint of topicos.endpoints) {
+    const { topic, maxPages } = endpoint;
+
+    for (let index = 0; index < maxPages; index++) {
+      const topico = await obterTopico(topic, index + 1);
+
+      for (const item of topico) {
+        paths.push({ params: { id: item.id + "" } });
+      }
+    }
   }
 
-  if (item.comments_count > 0) {
-    item.comments = item.comments.map(processarItem);
-  }
-
-  return item;
+  return {
+    paths,
+    fallback: "blocking",
+  };
 };
 
-interface PaginaItemProps {
-  item: Item;
-}
-
-export const getServerSideProps: GetServerSideProps<PaginaItemProps> = async ({
+export const getStaticProps: GetStaticProps<PaginaItemProps> = async ({
   params,
 }) => {
   if (!params?.id) {
@@ -44,74 +55,62 @@ export const getServerSideProps: GetServerSideProps<PaginaItemProps> = async ({
   }
 
   return {
-    props: { item: processarItem(item) },
+    props: { fallbackData: item },
+    revalidate: 10,
   };
 };
 
-function PaginaItem({
-  item,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const renderizarComentario = (itens: Item[]) =>
-    itens.map((item) => (
-      <article tabIndex={0} className={styles.comentario} key={item.id}>
-        <section className={styles.conteudo}>{parser(item.content)}</section>
-        <footer className={styles.informacoes}>
-          <span>{item.time_ago}</span>
-          {item.user && <span>{item.user}</span>}
-        </footer>
-        {item.comments && renderizarComentario(item.comments)}
-      </article>
-    ));
+const renderizarComentario = (comments: Item[]) =>
+  comments.map((comment) => (
+    <ItemComment item={comment} key={comment.id}>
+      {comment.comments && renderizarComentario(comment.comments)}
+    </ItemComment>
+  ));
+
+interface PaginaItemProps {
+  fallbackData: Item;
+}
+
+function PaginaItem({ fallbackData }: PaginaItemProps) {
+  const router = useRouter();
+  const { id } = router.query;
+
+  const { data: item } = useSWR([+id!], obterItem, {
+    fallbackData,
+  });
 
   return (
     <>
       <Head>
-        <title>{`${item.title} / hacker news`}</title>
+        <title>{`${item?.title ?? fallbackData.title} / hacker news`}</title>
         <meta
           name="description"
-          content={`(${item.points}) por ${item.user}`}
+          content={`(${item?.points ?? fallbackData.points}) por ${
+            item?.user ?? fallbackData.title
+          }`}
         ></meta>
       </Head>
       <main>
-        <article>
-          <section className={styles.item}>
-            <p className={styles.pontos}>{item.points}</p>
-            <h1 className={styles.titulo}>
-              {item.url?.includes("item?id=") ? (
-                <Link href={`/item/${item.id}`}>
-                  <a className={styles[item.type]}>{item.title}</a>
-                </Link>
-              ) : (
-                <a href={item.url} className={styles[item.type]}>
-                  {item.title}
-                </a>
-              )}
-            </h1>
-            <footer className={styles.informacoes}>
-              <span>{item.time_ago}</span>
-              <span>{item.user}</span>
-              <Link href={`/item/${item.id}`}>
-                <a>
-                  {item.comments_count === 1
-                    ? `1 comment`
-                    : `${item.comments_count ?? 0} comments`}
-                </a>
-              </Link>
-            </footer>
-          </section>
-
-          {item.content && (
-            <section className={styles.conteudo}>
-              {parser(item.content)}
+        {item && (
+          <article>
+            <section className={styles.item}>
+              <ItemHeader item={item} />
+              <ItemFooter item={item} />
             </section>
-          )}
 
-          {item.comments && (
-            <section className={styles.comentarios}>
-              {renderizarComentario(item.comments)}
-            </section>
-          )}
-        </article>
+            {item.content && (
+              <section className={styles.conteudo}>
+                <HTMLParser html={item.content} />
+              </section>
+            )}
+
+            {item.comments && (
+              <section className={styles.comentarios}>
+                {renderizarComentario(item.comments)}
+              </section>
+            )}
+          </article>
+        )}
       </main>
     </>
   );
