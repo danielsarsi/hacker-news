@@ -13,7 +13,7 @@ function ItemFooter({ item, showCommentsLink = true }: ItemFooterProps) {
     <footer className={styles.item_footer}>
       <span>{item.time_ago}</span>
       {item.user && <span>{item.user}</span>}
-      {(showCommentsLink || item.type !== "job") && (
+      {showCommentsLink && item.type !== "job" && (
         <Link href={`/item/${item.id}`}>
           <a>
             {item.comments_count === 1
