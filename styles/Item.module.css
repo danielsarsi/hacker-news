@@ -1,8 +1,8 @@
 .item {
-  margin: 3ch 0;
   display: grid;
-  grid-template-columns: 7ch 1fr;
   grid-template-rows: auto auto;
+  grid-template-columns: 7ch 1fr;
+  margin: 3ch 0;
 }
 
 .item_header {
@@ -10,28 +10,27 @@
 }
 
 .item_footer {
-  grid-row: 2 / 3;
-  grid-column: 2 / 3;
-  color: #222;
-  margin-top: 0.5ch;
   display: flex;
   flex-wrap: wrap;
-  column-gap: 3ch;
+  grid-row: 2 / 3;
+  grid-column: 2 / 3;
+  margin-top: 0.5ch;
   color: #666;
+  column-gap: 3ch;
   transition: color 0.1s ease;
 }
 
 .item_points {
-  font-weight: 700;
   grid-row: 1 / -1;
   margin: 0;
+  font-weight: 700;
 }
 
 .item_title {
-  margin: 0;
-  font-size: 1em;
   grid-row: 1 / 2;
   grid-column: 2 / 3;
+  margin: 0;
+  font-size: 1em;
 }
 
 .item:hover .item_footer {
@@ -54,9 +53,9 @@
 .item_content {
   margin: 3ch 0;
   margin-left: 6ch;
-  overflow-wrap: break-word;
   word-wrap: break-word;
   word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .item_comments {

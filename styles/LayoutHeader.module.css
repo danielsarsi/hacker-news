@@ -1,15 +1,15 @@
 .header {
   --header-gradient-top: rgb(255, 255, 255, 1);
   --header-gradient-bottom: rgb(255, 255, 255, 0);
-
-  padding: 8ch;
-  display: flex;
   position: fixed;
-  align-items: center;
-  column-gap: 3ch;
   top: 0;
+  display: flex;
+  align-items: center;
   width: 100%;
+  padding: 8ch;
+  column-gap: 3ch;
   background: linear-gradient(
+    to bottom,
     var(--header-gradient-top) 35%,
     var(--header-gradient-bottom)
   );

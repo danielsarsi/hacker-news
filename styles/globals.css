@@ -1,32 +1,32 @@
 @font-face {
+  font-weight: normal;
   font-family: "Space Mono";
+  font-style: italic;
   src: url("/space-mono/SpaceMono-Italic.woff2") format("woff2");
-  font-weight: normal;
-  font-style: italic;
   font-display: swap;
 }
 
 @font-face {
+  font-weight: bold;
   font-family: "Space Mono";
+  font-style: italic;
   src: url("/space-mono/SpaceMono-BoldItalic.woff2") format("woff2");
-  font-weight: bold;
-  font-style: italic;
   font-display: swap;
 }
 
 @font-face {
+  font-weight: bold;
   font-family: "Space Mono";
+  font-style: normal;
   src: url("/space-mono/SpaceMono-Bold.woff2") format("woff2");
-  font-weight: bold;
-  font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Space Mono";
-  src: url("/space-mono/SpaceMono-Regular.woff2") format("woff2");
   font-weight: normal;
+  font-family: "Space Mono";
   font-style: normal;
+  src: url("/space-mono/SpaceMono-Regular.woff2") format("woff2");
   font-display: swap;
 }
 
@@ -36,11 +36,11 @@
 
 html,
 body {
-  font-family: "Space Mono", monospace;
-  font-size: 13px;
-  padding: 0;
   margin: 0;
+  padding: 0;
   color: var(--text);
+  font-size: 13px;
+  font-family: "Space Mono", monospace;
 }
 
 a {
@@ -79,6 +79,7 @@ p {
   :root {
     --text: #fff;
   }
+
   body {
     background-color: #000;
   }
