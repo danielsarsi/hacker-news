@@ -40,11 +40,7 @@ export const getStaticProps: GetStaticProps<PaginaItemProps> = async ({
 
   const item = await obterItem(+params.id);
 
-  if (!item) {
-    return { notFound: true };
-  }
-
-  if (item.type === "job") {
+  if (!item || item.type === "job" || item.deleted || !item.title) {
     return { notFound: true };
   }
 
