@@ -36,7 +36,12 @@ function Circle() {
       className={[styles.circulo, carregando && styles.circulo_carregando].join(
         " "
       )}
-    />
+    >
+      <div className={styles.circulo_menor_conteudo}>
+        <div className={styles.circulo_menor}></div>
+      </div>
+      <div className={styles.circulo_maior} />
+    </div>
   );
 }
 
