@@ -1,9 +1,7 @@
+import ErrorPage from "./_error";
+
 function Error500() {
-  return (
-    <main>
-      <h1>500</h1>
-    </main>
-  );
+  return <ErrorPage statusCode={500} />;
 }
 
 export default Error500;

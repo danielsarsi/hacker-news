@@ -1,9 +1,7 @@
+import ErrorPage from "./_error";
+
 function Error404() {
-  return (
-    <main>
-      <h1>404</h1>
-    </main>
-  );
+  return <ErrorPage statusCode={404} />;
 }
 
 export default Error404;
