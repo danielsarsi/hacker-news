@@ -34,7 +34,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps<InicioProps> = async ({
   params,
 }) => {
-  if (!params || !params.topico) {
+  if (!params?.topico) {
     return { redirect: { destination: "/", permanent: false } };
   }
 
