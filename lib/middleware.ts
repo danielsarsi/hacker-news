@@ -1,4 +1,4 @@
-import { Middleware } from "swr";
+import type { Middleware } from "swr";
 
 export const loadingStateMiddleware: Middleware = (useSWRNext) => {
   return (key, fetcher, config) => {

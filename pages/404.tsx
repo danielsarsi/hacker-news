@@ -1,4 +1,4 @@
-function Erro404() {
+function Error404() {
   return (
     <main>
       <h1>404</h1>
@@ -6,4 +6,4 @@ function Erro404() {
   );
 }
 
-export default Erro404;
+export default Error404;

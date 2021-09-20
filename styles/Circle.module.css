@@ -1,13 +1,13 @@
-.circulo {
+.circle {
   width: 4ch;
   height: 4ch;
   position: relative;
 }
 
-.circulo_menor {
+.circle_small {
   width: 25%;
   height: 25%;
-  background-color: var(--texto);
+  background-color: var(--text);
   border-radius: 100%;
   position: absolute;
   top: 0;
@@ -16,32 +16,32 @@
   transform: translate(150%, 150%);
 }
 
-.circulo_menor_conteudo {
+.circle_small_content {
   width: 100%;
   height: 100%;
   position: absolute;
   top: 0;
   left: 0;
-  animation: rodando 1s linear infinite;
+  animation: rotation 1s linear infinite;
 }
 
-.circulo_maior {
+.circle_big {
   width: 100%;
   height: 100%;
-  background-color: var(--texto);
+  background-color: var(--text);
   border-radius: 100%;
   transition: transform 0.5s cubic-bezier(0, 0.55, 0.45, 1);
 }
 
-.circulo_carregando .circulo_maior {
+.circle_loading .circle_big {
   transform: scale(0.7);
 }
 
-.circulo_carregando .circulo_menor {
+.circle_loading .circle_small {
   transform: translate(0, 0);
 }
 
-@keyframes rodando {
+@keyframes rotation {
   0% {
     transform: rotate(0deg);
   }

@@ -1,6 +1,7 @@
 import Link from "next/link";
 
-import { Item, Story } from "../lib/api";
+import type { Item, Story } from "../lib/api";
+
 import styles from "../styles/Item.module.css";
 
 interface ItemFooterProps {

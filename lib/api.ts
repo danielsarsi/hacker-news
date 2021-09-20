@@ -38,28 +38,28 @@ export interface API {
 }
 
 export interface APIEndpoints {
-  topic: Topicos;
+  topic: Topics;
   url: string;
   maxPages: number;
 }
 
-export const TOPICOS = ["news", "newest", "ask", "show", "jobs"] as const;
+export const TOPICS = ["news", "newest", "ask", "show", "jobs"] as const;
 
-export type Topicos = typeof TOPICOS[number];
+export type Topics = typeof TOPICS[number];
 
-export async function obter<T>(url: string) {
+export async function api<T>(url: string) {
   const req = await fetch(`${API_URL}${url}`);
   return req.json() as Promise<T>;
 }
 
-export async function obterAPI() {
-  return obter<API>("/");
+export async function apiEndpoints() {
+  return api<API>("/");
 }
 
-export async function obterTopico(topico: string, pagina: number) {
-  return obter<Story[]>(`/${topico}/${pagina}.json`);
+export async function apiTopic(topic: string, page: number) {
+  return api<Story[]>(`/${topic}/${page}.json`);
 }
 
-export async function obterItem(id: number) {
-  return obter<Item>(`/item/${id}.json`);
+export async function apiItem(id: number) {
+  return api<Item>(`/item/${id}.json`);
 }

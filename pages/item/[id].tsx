@@ -1,24 +1,26 @@
+import Head from "next/head";
+import { useRouter } from "next/router";
+import useSWR from "swr";
+
+import type { Item } from "../../lib/api";
 import type {
   GetStaticPaths,
   GetStaticPathsResult,
   GetStaticProps,
 } from "next";
-import Head from "next/head";
-import { useRouter } from "next/router";
-import useSWR from "swr";
 
 import HTMLParser from "../../components/HTMLParser";
 import ItemComment from "../../components/ItemComment";
 import ItemFooter from "../../components/ItemFooter";
 import ItemHeader from "../../components/ItemHeader";
-import { Item, obterItem, obterTopico, TOPICOS } from "../../lib/api";
+import { apiItem, apiTopic, TOPICS } from "../../lib/api";
 import styles from "../../styles/Item.module.css";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths: GetStaticPathsResult["paths"] = [];
 
-  for (const topic of TOPICOS) {
-    const stories = await obterTopico(topic, 1);
+  for (const topic of TOPICS) {
+    const stories = await apiTopic(topic, 1);
 
     for (const story of stories) {
       paths.push({ params: { id: story.id + "" } });
@@ -31,41 +33,45 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps<PaginaItemProps> = async ({
-  params,
-}) => {
-  if (!params?.id) {
-    return { notFound: true };
-  }
+interface ItemPageQuery {
+  [key: string]: string;
+  id: string;
+}
 
-  const item = await obterItem(+params.id);
+export const getStaticProps: GetStaticProps<ItemPageProps, ItemPageQuery> =
+  async ({ params }) => {
+    if (!params?.id) {
+      return { notFound: true };
+    }
 
-  if (!item || item.type === "job" || item.deleted || !item.title) {
-    return { notFound: true };
-  }
+    const item = await apiItem(+params.id);
 
-  return {
-    props: { fallbackData: item },
-    revalidate: 10,
+    if (!item || item.type === "job" || item.deleted || !item.title) {
+      return { notFound: true };
+    }
+
+    return {
+      props: { fallbackData: item },
+      revalidate: 10,
+    };
   };
-};
 
-const renderizarComentario = (comments: Item[]) =>
+const renderItemComment = (comments: Item[]) =>
   comments.map((comment) => (
     <ItemComment item={comment} key={comment.id}>
-      {comment.comments && renderizarComentario(comment.comments)}
+      {comment.comments && renderItemComment(comment.comments)}
     </ItemComment>
   ));
 
-interface PaginaItemProps {
+interface ItemPageProps {
   fallbackData: Item;
 }
 
-function PaginaItem({ fallbackData }: PaginaItemProps) {
+function ItemPage({ fallbackData }: ItemPageProps) {
   const router = useRouter();
-  const { id } = router.query;
+  const { id } = router.query as ItemPageQuery;
 
-  const { data: item } = useSWR([+id!], obterItem, {
+  const { data: item } = useSWR([+id], apiItem, {
     fallbackData,
   });
 
@@ -75,7 +81,7 @@ function PaginaItem({ fallbackData }: PaginaItemProps) {
         <title>{`${item?.title ?? fallbackData.title} / hacker news`}</title>
         <meta
           name="description"
-          content={`(${item?.points ?? fallbackData.points}) por ${
+          content={`(${item?.points ?? fallbackData.points}) by ${
             item?.user ?? fallbackData.title
           }`}
         ></meta>
@@ -89,14 +95,14 @@ function PaginaItem({ fallbackData }: PaginaItemProps) {
             </section>
 
             {item.content && (
-              <section className={styles.conteudo}>
+              <section className={styles.item_content}>
                 <HTMLParser html={item.content} />
               </section>
             )}
 
             {item.comments && (
-              <section className={styles.comentarios}>
-                {renderizarComentario(item.comments)}
+              <section className={styles.item_comments}>
+                {renderItemComment(item.comments)}
               </section>
             )}
           </article>
@@ -106,4 +112,4 @@ function PaginaItem({ fallbackData }: PaginaItemProps) {
   );
 }
 
-export default PaginaItem;
+export default ItemPage;

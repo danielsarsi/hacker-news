@@ -1,7 +1,8 @@
 import Head from "next/head";
-import { ReactNode } from "react";
 
-import Header from "./Header";
+import type { ReactNode } from "react";
+
+import LayoutHeader from "./LayoutHeader";
 
 interface LayoutProps {
   children?: ReactNode;
@@ -19,7 +20,7 @@ function Layout({ children }: LayoutProps) {
         <link rel="icon" type="image/svg+xml" href="/circle.svg" />
         <link rel="alternate icon" href="/favicon.ico" />
       </Head>
-      <Header />
+      <LayoutHeader />
       {children}
     </>
   );

@@ -4,17 +4,17 @@ import { useRouter } from "next/router";
 import styles from "../styles/Nav.module.css";
 
 interface NavItemProps {
-  topico: string;
+  topic: string;
 }
 
-function NavItem({ topico }: NavItemProps) {
+function NavItem({ topic }: NavItemProps) {
   const router = useRouter();
-  const { topico: topicoParam } = router.query;
+  const { topic: topicParam } = router.query;
 
   return (
-    <li className={topico === topicoParam ? styles.ativo : undefined}>
-      <Link href={`/${topico}/1`}>
-        <a>{topico}</a>
+    <li className={topic === topicParam ? styles.active : undefined}>
+      <Link href={`/${topic}/1`}>
+        <a>{topic}</a>
       </Link>
     </li>
   );

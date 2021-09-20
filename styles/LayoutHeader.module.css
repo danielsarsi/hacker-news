@@ -1,0 +1,29 @@
+.header {
+  --header-gradient-top: rgb(255, 255, 255, 1);
+  --header-gradient-bottom: rgb(255, 255, 255, 0);
+
+  padding: 8ch;
+  display: flex;
+  position: fixed;
+  align-items: center;
+  column-gap: 3ch;
+  top: 0;
+  width: 100%;
+  background: linear-gradient(
+    var(--header-gradient-top) 35%,
+    var(--header-gradient-bottom)
+  );
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    padding: 5ch 3ch;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .header {
+    --header-gradient-top: rgba(0, 0, 0, 1);
+    --header-gradient-bottom: rgb(0, 0, 0, 0);
+  }
+}
