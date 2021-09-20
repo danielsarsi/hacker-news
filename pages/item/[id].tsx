@@ -20,14 +20,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const paths: GetStaticPathsResult["paths"] = [];
 
   for (const endpoint of topicos.endpoints) {
-    const { topic, maxPages } = endpoint;
+    const { topic } = endpoint;
 
-    for (let index = 0; index < maxPages; index++) {
-      const topico = await obterTopico(topic, index + 1);
+    const topico = await obterTopico(topic, 1);
 
-      for (const item of topico) {
-        paths.push({ params: { id: item.id + "" } });
-      }
+    for (const item of topico) {
+      paths.push({ params: { id: item.id + "" } });
     }
   }
 
