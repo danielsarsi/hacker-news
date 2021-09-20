@@ -1,35 +1,20 @@
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 import styles from "../styles/Circulo.module.css";
 
 function Circle() {
   const [carregando, estaCarregando] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
-    const eventoComeco = (url: string) => {
-      if (url !== router.asPath) {
-        estaCarregando(true);
-      }
+    const listener = (event: CustomEventInit<boolean>) => {
+      estaCarregando(event.detail || false);
     };
 
-    const eventoCompletado = (url: string) => {
-      if (url !== router.asPath) {
-        estaCarregando(false);
-      }
-    };
-
-    router.events.on("routeChangeStart", eventoComeco);
-    router.events.on("routeChangeComplete", eventoCompletado);
-    router.events.on("routeChangeError", eventoCompletado);
-
+    document.addEventListener("loading", listener);
     return () => {
-      router.events.off("routeChangeStart", eventoComeco);
-      router.events.off("routeChangeComplete", eventoCompletado);
-      router.events.off("routeChangeError", eventoCompletado);
+      document.removeEventListener("loading", listener);
     };
-  }, [router.asPath, router.events]);
+  }, []);
 
   return (
     <div
