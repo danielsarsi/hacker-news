@@ -14,6 +14,7 @@ import ItemHeader from "../../components/ItemHeader";
 import { apiTopic, apiEndpoints, TOPICS } from "../../lib/api";
 import styleItem from "../../styles/Item.module.css";
 import styleTopicPage from "../../styles/TopicPage.module.css";
+import Error500 from "../500";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const topics = await apiEndpoints();
@@ -76,9 +77,13 @@ function TopicPage({ fallbackData }: TopicPageProps) {
   const router = useRouter();
   const { topic, page } = router.query as TopicPageQuery;
 
-  const { data } = useSWR([topic, page], apiTopic, {
+  const { data, error } = useSWR([topic, page], apiTopic, {
     fallbackData,
   });
+
+  if (error) {
+    return <Error500 />;
+  }
 
   return (
     <>

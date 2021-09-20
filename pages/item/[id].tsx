@@ -15,6 +15,7 @@ import ItemFooter from "../../components/ItemFooter";
 import ItemHeader from "../../components/ItemHeader";
 import { apiItem, apiTopic, TOPICS } from "../../lib/api";
 import styles from "../../styles/Item.module.css";
+import Error500 from "../500";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths: GetStaticPathsResult["paths"] = [];
@@ -71,9 +72,13 @@ function ItemPage({ fallbackData }: ItemPageProps) {
   const router = useRouter();
   const { id } = router.query as ItemPageQuery;
 
-  const { data: item } = useSWR([+id], apiItem, {
+  const { data: item, error } = useSWR([+id], apiItem, {
     fallbackData,
   });
+
+  if (error) {
+    return <Error500 />;
+  }
 
   return (
     <>
