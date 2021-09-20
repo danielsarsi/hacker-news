@@ -16,7 +16,7 @@ const securityHeaders = [
   {
     key: "Content-Security-Policy",
     value:
-      "default-src 'self' sarsi.cc *.sarsi.cc; connect-src api.hnpwa.com vitals.vercel-insights.com",
+      "default-src 'self'; connect-src 'self' api.hnpwa.com vitals.vercel-insights.com",
   },
 ];
 
