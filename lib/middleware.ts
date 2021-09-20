@@ -8,9 +8,14 @@ export const loadingStateMiddleware: Middleware = (useSWRNext) => {
 
     const fetcherWihLoadingState = async (...args: unknown[]) => {
       document.dispatchEvent(new CustomEvent("loading", { detail: true }));
-      const req = await fetcher(...args);
-      document.dispatchEvent(new CustomEvent("loading", { detail: false }));
-      return req;
+      try {
+        const req = await fetcher(...args);
+        document.dispatchEvent(new CustomEvent("loading", { detail: false }));
+        return req;
+      } catch (err) {
+        document.dispatchEvent(new CustomEvent("loading", { detail: false }));
+        throw err;
+      }
     };
 
     return useSWRNext(key, fetcherWihLoadingState, config);
