@@ -10,13 +10,9 @@ const securityHeaders = [
     value: "SAMEORIGIN",
   },
   {
-    key: "X-Content-Type-Options",
-    value: "nosniff",
-  },
-  {
     key: "Content-Security-Policy",
     value:
-      "default-src 'self'; connect-src 'self' api.hnpwa.com vitals.vercel-insights.com",
+      "default-src 'self' 'unsafe-inline'; connect-src 'self' api.hnpwa.com vitals.vercel-insights.com",
   },
 ];
 
