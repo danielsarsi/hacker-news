@@ -1,4 +1,4 @@
-const { PHASE_PRODUCTION_SERVER } = require("next/constants");
+const { PHASE_PRODUCTION_BUILD } = require("next/constants");
 
 const securityHeaders = [
   {
@@ -40,7 +40,7 @@ const nextConfig = (phase) => ({
   },
   async headers() {
     return [
-      phase === PHASE_PRODUCTION_SERVER && {
+      phase === PHASE_PRODUCTION_BUILD && {
         source: "/(.*)",
         headers: securityHeaders,
       },
