@@ -33,7 +33,8 @@
   transition: transform 0.5s cubic-bezier(0, 0.55, 0.45, 1);
 }
 
-.circle_loading .circle_big {
+.circle_loading .circle_big,
+.circle:hover .circle_big {
   transform: scale(0.7);
 }
 
