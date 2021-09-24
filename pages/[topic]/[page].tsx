@@ -2,7 +2,6 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
-import type { Story } from "../../lib/api";
 import type {
   GetStaticPaths,
   GetStaticPathsResult,
@@ -11,10 +10,11 @@ import type {
 
 import ItemFooter from "../../components/ItemFooter";
 import ItemHeader from "../../components/ItemHeader";
-import { apiTopic, apiEndpoints, TOPICS } from "../../lib/api";
+import { APIError, Story, apiTopic, apiEndpoints, TOPICS } from "../../lib/api";
 import styleItem from "../../styles/Item.module.css";
 import styleTopicPage from "../../styles/TopicPage.module.css";
 import Error500 from "../500";
+import ErrorPage from "../_error";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const topics = await apiEndpoints();
@@ -82,6 +82,10 @@ function TopicPage({ fallbackData }: TopicPageProps) {
   });
 
   if (error) {
+    if (error instanceof APIError) {
+      return <ErrorPage statusCode={error.statusCode} />;
+    }
+
     return <Error500 />;
   }
 

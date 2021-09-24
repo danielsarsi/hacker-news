@@ -2,7 +2,6 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
-import type { Item } from "../../lib/api";
 import type {
   GetStaticPaths,
   GetStaticPathsResult,
@@ -13,9 +12,10 @@ import HTMLParser from "../../components/HTMLParser";
 import ItemComment from "../../components/ItemComment";
 import ItemFooter from "../../components/ItemFooter";
 import ItemHeader from "../../components/ItemHeader";
-import { apiItem, apiTopic, TOPICS } from "../../lib/api";
+import { APIError, Item, apiItem, apiTopic, TOPICS } from "../../lib/api";
 import styles from "../../styles/Item.module.css";
 import Error500 from "../500";
+import ErrorPage from "../_error";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths: GetStaticPathsResult["paths"] = [];
@@ -77,6 +77,10 @@ function ItemPage({ fallbackData }: ItemPageProps) {
   });
 
   if (error) {
+    if (error instanceof APIError) {
+      return <ErrorPage statusCode={error.statusCode} />;
+    }
+
     return <Error500 />;
   }
 

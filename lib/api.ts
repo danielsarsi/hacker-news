@@ -47,9 +47,24 @@ export const TOPICS = ["news", "newest", "ask", "show", "jobs"] as const;
 
 export type Topics = typeof TOPICS[number];
 
+export class APIError extends Error {
+  statusCode: number;
+
+  constructor(statusCode: number) {
+    super(`API responded with ${statusCode}`);
+    this.name = "APIError";
+    this.statusCode = statusCode;
+  }
+}
+
 export async function api<T>(url: string) {
-  const req = await fetch(`${API_URL}${url}`);
-  return req.json() as Promise<T>;
+  const res = await fetch(`${API_URL}${url}`);
+
+  if (res.ok) {
+    return res.json() as Promise<T>;
+  } else {
+    throw new APIError(res.status);
+  }
 }
 
 export async function apiEndpoints() {
