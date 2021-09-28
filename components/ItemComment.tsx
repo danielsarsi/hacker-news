@@ -1,5 +1,4 @@
 import type { Item } from "../lib/api";
-
 import styles from "../styles/Item.module.css";
 import HTMLParser from "./HTMLParser";
 import ItemFooter from "./ItemFooter";

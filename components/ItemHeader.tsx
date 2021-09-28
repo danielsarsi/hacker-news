@@ -1,7 +1,6 @@
 import Link from "next/link";
 
 import type { Item, Story } from "../lib/api";
-
 import styles from "../styles/Item.module.css";
 
 interface ItemHeaderProps {

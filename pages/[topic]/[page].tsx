@@ -1,20 +1,19 @@
-import Head from "next/head";
-import { useRouter } from "next/router";
-import useSWR from "swr";
-
 import type {
   GetStaticPaths,
   GetStaticPathsResult,
   GetStaticProps,
 } from "next";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import useSWR from "swr";
 
 import ItemFooter from "../../components/ItemFooter";
 import ItemHeader from "../../components/ItemHeader";
-import { APIError, Story, apiTopic, apiEndpoints, TOPICS } from "../../lib/api";
+import { apiEndpoints, APIError, apiTopic, Story, TOPICS } from "../../lib/api";
 import styleItem from "../../styles/Item.module.css";
 import styleTopicPage from "../../styles/TopicPage.module.css";
-import Error500 from "../500";
 import ErrorPage from "../_error";
+import Error500 from "../500";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const topics = await apiEndpoints();

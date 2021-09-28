@@ -1,27 +1,15 @@
 {
+  "plugins": ["sonarjs", "simple-import-sort"],
   "extends": [
     "next",
     "next/core-web-vitals",
-    "plugin:import/recommended",
-    "plugin:import/typescript",
+    "plugin:sonarjs/recommended",
     "prettier"
   ],
   "rules": {
-    "import/order": [
-      "error",
-      {
-        "groups": [
-          "builtin",
-          "external",
-          "type",
-          ["parent", "sibling"],
-          "index"
-        ],
-        "newlines-between": "always",
-        "alphabetize": {
-          "order": "asc"
-        }
-      }
-    ]
+    "unicorn/prevent-abbreviations": "off",
+    "unicorn/filename-case": "off",
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error"
   }
 }
