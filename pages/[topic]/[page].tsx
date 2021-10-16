@@ -9,6 +9,7 @@ import useSWR from "swr";
 
 import ItemFooter from "../../components/ItemFooter";
 import ItemHeader from "../../components/ItemHeader";
+import Pagination from "../../components/Pagination";
 import { apiEndpoints, APIError, apiTopic, Story, TOPICS } from "../../lib/api";
 import styleItem from "../../styles/Item.module.css";
 import styleTopicPage from "../../styles/TopicPage.module.css";
@@ -54,6 +55,16 @@ export const getStaticProps: GetStaticProps<TopicPageProps, TopicPageQuery> =
       };
     }
 
+    const topics = await apiEndpoints();
+
+    const endpoint = topics.endpoints.find(
+      (endpoint) => endpoint.topic === params.topic
+    );
+
+    if (!endpoint || !endpoint.maxPages) {
+      return { notFound: true };
+    }
+
     const news = await apiTopic(params.topic, +params.page);
 
     if (news.length === 0) {
@@ -63,6 +74,7 @@ export const getStaticProps: GetStaticProps<TopicPageProps, TopicPageQuery> =
     return {
       props: {
         fallbackData: news,
+        maxPages: endpoint.maxPages,
       },
       revalidate: 60,
     };
@@ -70,9 +82,10 @@ export const getStaticProps: GetStaticProps<TopicPageProps, TopicPageQuery> =
 
 interface TopicPageProps {
   fallbackData: Story[];
+  maxPages: number;
 }
 
-function TopicPage({ fallbackData }: TopicPageProps) {
+function TopicPage({ fallbackData, maxPages }: TopicPageProps) {
   const router = useRouter();
   const { topic, page } = router.query as TopicPageQuery;
 
@@ -104,6 +117,7 @@ function TopicPage({ fallbackData }: TopicPageProps) {
             </li>
           ))}
         </ol>
+        <Pagination maxPages={maxPages} page={+page} />
       </main>
     </>
   );

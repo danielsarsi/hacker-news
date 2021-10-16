@@ -1,0 +1,22 @@
+.pagination_nav {
+  margin: 8ch 0;
+}
+
+.pagination_list {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  gap: 3ch;
+  list-style: none;
+}
+
+.pagination_list a {
+  padding: 1ch;
+  background-color: transparent;
+  border-radius: 3px;
+}
+
+.pagination_list a[aria-current="page"] {
+  background-color: var(--text);
+  color: #fff;
+}
