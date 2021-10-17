@@ -57,6 +57,10 @@ export class APIError extends Error {
   }
 }
 
+export function isValidTopic(topic: string): topic is Topics {
+  return TOPICS.includes(topic as Topics);
+}
+
 export async function api<T>(url: string) {
   const res = await fetch(`${API_URL}${url}`);
 
@@ -71,7 +75,7 @@ export async function apiEndpoints() {
   return api<API>("/");
 }
 
-export async function apiTopic(topic: string, page: number) {
+export async function apiTopic(topic: Topics, page: number) {
   return api<Story[]>(`/${topic}/${page}.json`);
 }
 

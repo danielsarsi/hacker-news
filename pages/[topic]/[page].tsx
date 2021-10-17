@@ -10,7 +10,15 @@ import useSWR from "swr";
 import ItemFooter from "../../components/ItemFooter";
 import ItemHeader from "../../components/ItemHeader";
 import Pagination from "../../components/Pagination";
-import { apiEndpoints, APIError, apiTopic, Story, TOPICS } from "../../lib/api";
+import {
+  apiEndpoints,
+  APIError,
+  apiTopic,
+  isValidTopic,
+  Story,
+  TOPICS,
+  Topics,
+} from "../../lib/api";
 import styleItem from "../../styles/Item.module.css";
 import styleTopicPage from "../../styles/TopicPage.module.css";
 import ErrorPage from "../_error";
@@ -39,22 +47,30 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 interface TopicPageQuery {
   [key: string]: string;
-  topic: string;
+  topic: Topics;
   page: string;
 }
 
 export const getStaticProps: GetStaticProps<TopicPageProps, TopicPageQuery> =
   async ({ params }) => {
-    if (!params?.topic) {
-      return { redirect: { destination: "/", permanent: false } };
+    if (!params) {
+      return { redirect: { destination: "/", permanent: true } };
     }
 
+    // Check if topic is valid.
+    if (!isValidTopic(params.topic)) {
+      return { notFound: true };
+    }
+
+    // Check if there's a page number.
     if (!params.page) {
       return {
-        redirect: { destination: `/${params.topic}/1`, permanent: false },
+        redirect: { destination: `/${params.topic}/1`, permanent: true },
       };
     }
 
+    // Now we know the topic is valid and there's a page number, so we
+    // need to check if there's an endpoint and its maxPages.
     const topics = await apiEndpoints();
 
     const endpoint = topics.endpoints.find(
@@ -65,6 +81,7 @@ export const getStaticProps: GetStaticProps<TopicPageProps, TopicPageQuery> =
       return { notFound: true };
     }
 
+    // Get the news.
     const news = await apiTopic(params.topic, +params.page);
 
     if (news.length === 0) {
@@ -117,7 +134,7 @@ function TopicPage({ fallbackData, maxPages }: TopicPageProps) {
             </li>
           ))}
         </ol>
-        <Pagination maxPages={maxPages} page={+page} />
+        <Pagination topic={topic} maxPages={maxPages} page={+page} />
       </main>
     </>
   );
