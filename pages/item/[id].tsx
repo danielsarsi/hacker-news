@@ -7,13 +7,13 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
+import ErrorPage from "../../components/ErrorPage";
 import HTMLParser from "../../components/HTMLParser";
 import ItemComment from "../../components/ItemComment";
 import ItemFooter from "../../components/ItemFooter";
 import ItemHeader from "../../components/ItemHeader";
 import { APIError, apiItem, apiTopic, Item, TOPICS } from "../../lib/api";
 import styles from "../../styles/Item.module.css";
-import ErrorPage from "../_error";
 import Error500 from "../500";
 
 export const getStaticPaths: GetStaticPaths = async () => {
