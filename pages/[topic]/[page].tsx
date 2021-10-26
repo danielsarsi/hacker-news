@@ -81,20 +81,33 @@ export const getStaticProps: GetStaticProps<TopicPageProps, TopicPageQuery> =
       return { notFound: true };
     }
 
-    // Get the news.
-    const news = await apiTopic(params.topic, +params.page);
+    try {
+      // Get the news.
+      const news = await apiTopic(params.topic, +params.page);
 
-    if (news.length === 0) {
-      return { notFound: true };
+      if (news.length === 0) {
+        return { notFound: true };
+      }
+
+      return {
+        props: {
+          fallbackData: news,
+          maxPages: endpoint.maxPages,
+        },
+        revalidate: 60,
+      };
+    } catch (error) {
+      if (error instanceof APIError && error.statusCode === 404) {
+        return { notFound: true };
+      }
+
+      return {
+        redirect: {
+          destination: `/500`,
+          permanent: false,
+        },
+      };
     }
-
-    return {
-      props: {
-        fallbackData: news,
-        maxPages: endpoint.maxPages,
-      },
-      revalidate: 60,
-    };
   };
 
 interface TopicPageProps {
