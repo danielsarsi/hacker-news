@@ -1,10 +1,5 @@
-import type {
-  GetStaticPaths,
-  GetStaticPathsResult,
-  GetStaticProps,
-} from "next";
+import type { GetStaticPaths, GetStaticProps } from "next";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import useSWR from "swr";
 
 import ErrorPage from "../../components/ErrorPage";
