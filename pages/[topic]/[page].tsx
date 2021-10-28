@@ -24,19 +24,9 @@ import styleTopicPage from "../../styles/TopicPage.module.css";
 import Error500 from "../500";
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const topics = await apiEndpoints();
-
-  const paths: GetStaticPathsResult["paths"] = [];
-
-  for (const endpoint of topics.endpoints) {
-    const { topic, maxPages } = endpoint;
-
-    if (TOPICS.includes(topic)) {
-      for (let index = 0; index < maxPages; index++) {
-        paths.push({ params: { topic, page: index + 1 + "" } });
-      }
-    }
-  }
+  const paths = TOPICS.map((topic) => ({
+    params: { topic, page: "1" },
+  }));
 
   return {
     paths,
