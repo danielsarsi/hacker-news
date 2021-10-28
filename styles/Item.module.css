@@ -53,9 +53,6 @@
 .item_content {
   margin: 3ch 0;
   margin-left: 6ch;
-  overflow-wrap: break-word;
-  word-break: break-word;
-  word-wrap: break-word;
 }
 
 .item_comments {
@@ -80,6 +77,10 @@
 
 .item_comment .item_content {
   margin: 2ch 0;
+}
+
+.item_comment pre {
+  overflow: auto;
 }
 
 @media screen and (max-width: 600px) {
