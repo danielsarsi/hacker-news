@@ -13,6 +13,7 @@ import ItemComment from "../../components/ItemComment";
 import ItemFooter from "../../components/ItemFooter";
 import ItemHeader from "../../components/ItemHeader";
 import { APIError, apiItem, apiTopic, Item, TOPICS } from "../../lib/api";
+import { isValidNumber } from "../../lib/utils";
 import styles from "../../styles/Item.module.css";
 import Error500 from "../500";
 
@@ -33,28 +34,29 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-interface ItemPageQuery {
-  [key: string]: string;
-  id: string;
-}
+export const getStaticProps: GetStaticProps<ItemPageProps> = async ({
+  params,
+}) => {
+  if (!params) {
+    return { redirect: { destination: "/", permanent: true } };
+  }
 
-export const getStaticProps: GetStaticProps<ItemPageProps, ItemPageQuery> =
-  async ({ params }) => {
-    if (!params?.id) {
-      return { notFound: true };
-    }
+  if (!isValidNumber(params.id)) {
+    return { notFound: true };
+  }
 
-    const item = await apiItem(+params.id);
+  const id = +params.id;
+  const item = await apiItem(id);
 
-    if (!item || item.type === "job" || item.deleted || !item.title) {
-      return { notFound: true };
-    }
+  if (!item || item.type === "job" || item.deleted || !item.title) {
+    return { notFound: true };
+  }
 
-    return {
-      props: { fallbackData: item },
-      revalidate: 10,
-    };
+  return {
+    props: { id, item },
+    revalidate: 10,
   };
+};
 
 const renderItemComment = (comments: Item[]) =>
   comments.map((comment) => (
@@ -64,15 +66,13 @@ const renderItemComment = (comments: Item[]) =>
   ));
 
 interface ItemPageProps {
-  fallbackData: Item;
+  id: number;
+  item: Item;
 }
 
-function ItemPage({ fallbackData }: ItemPageProps) {
-  const router = useRouter();
-  const { id } = router.query as ItemPageQuery;
-
-  const { data: item, error } = useSWR([+id], apiItem, {
-    fallbackData,
+function ItemPage({ id, item }: ItemPageProps) {
+  const { data, error } = useSWR<Item, Error>([id], apiItem, {
+    fallbackData: item,
   });
 
   if (error) {
@@ -86,31 +86,29 @@ function ItemPage({ fallbackData }: ItemPageProps) {
   return (
     <>
       <Head>
-        <title>{`${item?.title ?? fallbackData.title} / hacker news`}</title>
+        <title>{`${item.title} / hacker news`}</title>
         <meta
           name="description"
-          content={`(${item?.points ?? fallbackData.points}) by ${
-            item?.user ?? fallbackData.title
-          }`}
+          content={`(${item.points}) by ${item?.user}`}
         ></meta>
       </Head>
       <main>
-        {item && (
+        {data && (
           <article>
             <section className={styles.item}>
-              <ItemHeader item={item} />
-              <ItemFooter item={item} />
+              <ItemHeader item={data} />
+              <ItemFooter item={data} />
             </section>
 
-            {item.content && (
+            {data.content && (
               <section className={styles.item_content}>
-                <HTMLParser html={item.content} />
+                <HTMLParser html={data.content} />
               </section>
             )}
 
-            {item.comments && (
+            {data.comments && (
               <section className={styles.item_comments}>
-                {renderItemComment(item.comments)}
+                {renderItemComment(data.comments)}
               </section>
             )}
           </article>

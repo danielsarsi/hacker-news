@@ -11,7 +11,7 @@ const nextConfig = () => ({
         permanent: false,
       },
       {
-        source: "/:topic(news|newest|ask|show|jobs)",
+        source: "/:topic",
         destination: "/:topic/1",
         permanent: false,
       },

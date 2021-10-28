@@ -44,7 +44,6 @@ export interface APIEndpoints {
 }
 
 export const TOPICS = ["news", "newest", "ask", "show", "jobs"] as const;
-
 export type Topics = typeof TOPICS[number];
 
 export class APIError extends Error {
@@ -57,15 +56,17 @@ export class APIError extends Error {
   }
 }
 
-export function isValidTopic(topic: string): topic is Topics {
-  return TOPICS.includes(topic as Topics);
-}
-
 export async function api<T>(url: string) {
   const res = await fetch(`${API_URL}${url}`);
 
   if (res.ok) {
-    return res.json() as Promise<T>;
+    const json = await res.json();
+
+    if (json === null) {
+      throw new APIError(404);
+    }
+
+    return json as Promise<T>;
   } else {
     throw new APIError(res.status);
   }
@@ -80,5 +81,5 @@ export async function apiTopic(topic: Topics, page: number) {
 }
 
 export async function apiItem(id: number) {
-  return api<Item | null>(`/item/${id}.json`);
+  return api<Item>(`/item/${id}.json`);
 }

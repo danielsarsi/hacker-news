@@ -4,7 +4,6 @@ import type {
   GetStaticProps,
 } from "next";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import useSWR from "swr";
 
 import ErrorPage from "../../components/ErrorPage";
@@ -15,11 +14,11 @@ import {
   apiEndpoints,
   APIError,
   apiTopic,
-  isValidTopic,
   Story,
   TOPICS,
   Topics,
 } from "../../lib/api";
+import { isValidNumber, isValidTopic } from "../../lib/utils";
 import styleItem from "../../styles/Item.module.css";
 import styleTopicPage from "../../styles/TopicPage.module.css";
 import Error500 from "../500";
@@ -45,69 +44,68 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-interface TopicPageQuery {
-  [key: string]: string;
-  topic: Topics;
-  page: string;
-}
+export const getStaticProps: GetStaticProps<TopicPageProps> = async ({
+  params,
+}) => {
+  if (!params) {
+    return { redirect: { destination: "/", permanent: true } };
+  }
 
-export const getStaticProps: GetStaticProps<TopicPageProps, TopicPageQuery> =
-  async ({ params }) => {
-    if (!params) {
-      return { redirect: { destination: "/", permanent: true } };
-    }
+  // Check if topic is valid.
+  if (!isValidTopic(params.topic)) {
+    return { notFound: true };
+  }
 
-    // Check if topic is valid.
-    if (!isValidTopic(params.topic)) {
-      return { notFound: true };
-    }
-
-    // Check if there's a page number.
-    if (!params.page) {
-      return {
-        redirect: { destination: `/${params.topic}/1`, permanent: true },
-      };
-    }
-
-    // Now we know the topic is valid and there's a page number, so we
-    // need to check if there's an endpoint and its maxPages.
-    const topics = await apiEndpoints();
-
-    const endpoint = topics.endpoints.find(
-      (endpoint) => endpoint.topic === params.topic
-    );
-
-    if (!endpoint || !endpoint.maxPages) {
-      return { notFound: true };
-    }
-
-    // Get the news.
-    const news = await apiTopic(params.topic, +params.page);
-
-    if (news.length === 0) {
-      return { notFound: true };
-    }
-
+  // Check if page number is valid.
+  if (!isValidNumber(params.page)) {
     return {
-      props: {
-        fallbackData: news,
-        maxPages: endpoint.maxPages,
-      },
-      revalidate: 60,
+      redirect: { destination: `/${params.topic}/1`, permanent: true },
     };
+  }
+
+  const topic = params.topic;
+  const page = +params.page;
+
+  // Now we know the topic is valid and there's a page number, so we
+  // need to check if there's an endpoint and its maxPages.
+  const topics = await apiEndpoints();
+
+  const endpoint = topics.endpoints.find(
+    (endpoint) => endpoint.topic === topic
+  );
+
+  if (!endpoint || !endpoint.maxPages) {
+    return { notFound: true };
+  }
+
+  // Get the news.
+  const news = await apiTopic(topic, page);
+
+  if (news.length === 0) {
+    return { notFound: true };
+  }
+
+  return {
+    props: {
+      topic,
+      stories: news,
+      page,
+      maxPages: endpoint.maxPages,
+    },
+    revalidate: 60,
   };
+};
 
 interface TopicPageProps {
-  fallbackData: Story[];
+  topic: Topics;
+  stories: Story[];
+  page: number;
   maxPages: number;
 }
 
-function TopicPage({ fallbackData, maxPages }: TopicPageProps) {
-  const router = useRouter();
-  const { topic, page } = router.query as TopicPageQuery;
-
-  const { data, error } = useSWR([topic, page], apiTopic, {
-    fallbackData,
+function TopicPage({ page, maxPages, topic, stories }: TopicPageProps) {
+  const { data, error } = useSWR<Story[], Error>([topic, page], apiTopic, {
+    fallbackData: stories,
   });
 
   if (error) {
