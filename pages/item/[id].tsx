@@ -18,15 +18,11 @@ import styles from "../../styles/Item.module.css";
 import Error500 from "../500";
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths: GetStaticPathsResult["paths"] = [];
-
-  for (const topic of TOPICS) {
-    const stories = await apiTopic(topic, 1);
-
-    for (const story of stories) {
-      paths.push({ params: { id: story.id + "" } });
-    }
-  }
+  const topics = await Promise.all(TOPICS.map((topic) => apiTopic(topic, 1)));
+  const storiesIds = topics.flatMap((story) => story.map((item) => item.id));
+  const paths = storiesIds.map((id) => ({
+    params: { id: id + "" },
+  }));
 
   return {
     paths,
