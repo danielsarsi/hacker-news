@@ -1,54 +1,53 @@
 :root {
-  --text: #111;
+	--text: #111;
 }
 
 html,
 body {
-  padding: 0;
-  margin: 0;
-  color: var(--text);
-  font-family: "Space Mono", monospace;
-  font-size: 13px;
+	padding: 0;
+	margin: 0;
+	color: var(--text);
+	font-size: 13px;
 }
 
 a {
-  color: inherit;
-  text-decoration-color: transparent;
-  text-decoration-skip-ink: none;
-  text-decoration-thickness: 0.25ch;
-  transition: text-decoration-color 0.05s ease;
+	color: inherit;
+	text-decoration-color: transparent;
+	text-decoration-skip-ink: none;
+	text-decoration-thickness: 0.25ch;
+	transition: text-decoration-color 0.05s ease;
 }
 
 a:hover {
-  text-decoration-color: inherit;
+	text-decoration-color: inherit;
 }
 
 * {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 main {
-  margin: 20ch 8ch;
-  margin-bottom: 0;
+	margin: 20ch 8ch;
+	margin-bottom: 0;
 }
 
 p {
-  margin: 2ch 0;
+	margin: 2ch 0;
 }
 
 @media screen and (max-width: 600px) {
-  main {
-    margin: 14ch 3ch;
-    margin-bottom: 0;
-  }
+	main {
+		margin: 14ch 3ch;
+		margin-bottom: 0;
+	}
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --text: #fff;
-  }
+	:root {
+		--text: #fff;
+	}
 
-  body {
-    background-color: #000;
-  }
+	body {
+		background-color: #000;
+	}
 }

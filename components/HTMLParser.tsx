@@ -1,12 +1,14 @@
+"use client";
+
 import parser from "html-react-parser";
 import { sanitize } from "isomorphic-dompurify";
 
 interface HTMLParserProps {
-  html: string;
+	html: string;
 }
 
 function HTMLParser({ html }: HTMLParserProps) {
-  return <>{parser(sanitize(html))}</>;
+	return <>{parser(sanitize(html))}</>;
 }
 
 export default HTMLParser;

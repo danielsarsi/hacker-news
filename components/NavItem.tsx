@@ -1,21 +1,28 @@
+"use client";
+
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useSelectedLayoutSegments } from "next/navigation";
 
 import styles from "../styles/Nav.module.css";
 
 interface NavItemProps {
-  topic: string;
+	topic: string;
 }
 
 function NavItem({ topic }: NavItemProps) {
-  const router = useRouter();
-  const { topic: topicParam } = router.query;
+	const selectedLayoutSegments = useSelectedLayoutSegments();
 
-  return (
-    <li className={topic === topicParam ? styles.active : undefined}>
-      <Link href={`/${topic}/1`}>{topic}</Link>
-    </li>
-  );
+	return (
+		<li
+			className={
+				selectedLayoutSegments && selectedLayoutSegments[0] === topic
+					? styles.active
+					: undefined
+			}
+		>
+			<Link href={`/${topic}/1`}>{topic}</Link>
+		</li>
+	);
 }
 
 export default NavItem;
