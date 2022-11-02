@@ -15,8 +15,8 @@ function ItemHeader({ item }: ItemHeaderProps) {
       </p>
       <h1 className={styles.item_title}>
         {item.url?.includes("item?id=") ? (
-          <Link href={`/item/${item.id}`}>
-            <a className={styles[item.type]}>{item.title}</a>
+          <Link href={`/item/${item.id}`} className={styles[item.type]}>
+            {item.title}
           </Link>
         ) : (
           <a href={item.url} className={styles[item.type]}>

@@ -13,9 +13,7 @@ function NavItem({ topic }: NavItemProps) {
 
   return (
     <li className={topic === topicParam ? styles.active : undefined}>
-      <Link href={`/${topic}/1`}>
-        <a>{topic}</a>
-      </Link>
+      <Link href={`/${topic}/1`}>{topic}</Link>
     </li>
   );
 }
