@@ -8,9 +8,7 @@ function LayoutHeader() {
   return (
     <header className={styles.header}>
       <Link href="/news/1">
-        <a>
-          <Circle />
-        </a>
+        <Circle />
       </Link>
       <Nav />
     </header>

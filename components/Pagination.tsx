@@ -15,8 +15,11 @@ function Pagination({ topic, page, maxPages }: PaginationProps) {
       <ol className={styles.pagination_list}>
         {Array.from({ length: maxPages }, (_, i) => (
           <li key={i}>
-            <Link href={`/${topic}/${i + 1}`}>
-              <a aria-current={i + 1 === page ? "page" : undefined}>{i + 1}</a>
+            <Link
+              href={`/${topic}/${i + 1}`}
+              aria-current={i + 1 === page ? "page" : undefined}
+            >
+              {i + 1}
             </Link>
           </li>
         ))}

@@ -20,6 +20,7 @@
     "*.{json,md,html}": "prettier --write"
   },
   "dependencies": {
+    "axios": "^1.12.2",
     "html-react-parser": "^5.1.18",
     "isomorphic-dompurify": "^2.16.0",
     "next": "^15.0.3",
