@@ -15,11 +15,9 @@ function ItemFooter({ item, showCommentsLink = true }: ItemFooterProps) {
       {item.user && <span>{item.user}</span>}
       {showCommentsLink && item.type !== "job" && (
         <Link href={`/item/${item.id}`}>
-          <a>
-            {item.comments_count === 1
-              ? `1 comment`
-              : `${item.comments_count ?? 0} comments`}
-          </a>
+          {item.comments_count === 1
+            ? `1 comment`
+            : `${item.comments_count ?? 0} comments`}
         </Link>
       )}
     </footer>

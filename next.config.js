@@ -1,9 +1,8 @@
 /**
  * @type {import('next').NextConfig}
  */
-const nextConfig = () => ({
-  swcMinify: true,
-  redirects() {
+const nextConfig = {
+  async redirects() {
     return [
       {
         source: "/",
@@ -17,6 +16,6 @@ const nextConfig = () => ({
       },
     ];
   },
-});
+};
 
 module.exports = nextConfig;
