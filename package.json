@@ -10,7 +10,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "next lint --fix .",
+      "eslint --fix",
       "prettier --write"
     ],
     "*.{css,scss}": [
@@ -28,6 +28,10 @@
     "swr": "^2.3.8"
   },
   "devDependencies": {
+    "@eslint/compat": "^2.0.0",
+    "@eslint/eslintrc": "^3.3.3",
+    "@eslint/js": "^9.39.2",
+    "@types/node": "25.0.3",
     "@types/react": "^19.2.7",
     "eslint": "^9.39.2",
     "eslint-config-next": "^16.1.1",
@@ -39,6 +43,7 @@
     "stylelint": "^16.26.1",
     "stylelint-config-idiomatic-order": "^10.0.0",
     "stylelint-config-recommended": "^17.0.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.51.0"
   }
 }
